@@ -1,0 +1,55 @@
+<ion-header>
+
+  <ion-navbar>
+    <!-- <ion-title>attendant-detail</ion-title> -->
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content no-padding>
+  <ion-grid>
+    <ion-row class="backImageRow">
+      <ion-col col-12>
+        <div class="backImage image"></div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="userImageRow" text-center>
+      <ion-col col-12 text-center>
+        <div class="userImage image"></div>
+      </ion-col>
+    </ion-row>
+    <ion-row text-center>
+      <ion-col col-12 class="name"> {{attendant?.name}} </ion-col>
+      <ion-col col-12 class="profession"> {{attendant?.profession}} CTO at marvel prototyping </ion-col>
+      <ion-col col-12 class="ticket-details"> {{attendant?.ticketDetails}} Ticket: General attendance </ion-col>
+      <ion-col col-12 class="ticket-time"> {{attendant?.ticketTime}} 06:45 PM </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-grid class="footer-grid">
+    <ion-row>
+      <ion-col col-12>
+        <div class="place">Smart city conference</div>
+        <div class="place-2">Carnegie Hall, Seattle Univ., Washington</div>
+      </ion-col>
+    </ion-row>
+    <ion-row class="detail">
+      <ion-col col-2 text-right>
+        <b>20</b>
+      </ion-col>
+      <ion-col col-3 text-left class="detail-2">
+        checked
+      </ion-col>
+      <ion-col col-2 text-right>
+        <b>295</b>
+      </ion-col>
+      <ion-col col-3 text-left class="detail-2">
+        remaining
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>

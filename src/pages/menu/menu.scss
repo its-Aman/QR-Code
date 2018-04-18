@@ -1,0 +1,39 @@
+page-menu {
+.menu-header{
+    display: flex;
+    margin: auto;
+}
+.menu-header-row{
+    margin: 50px 0;
+}
+ion-menu{
+    .scroll-content{
+        margin-top:225px;
+        background-color: #1E2D3E;
+    }
+}
+.menu-header-grid{
+    background-color: #1E2D3E;
+    color: white;
+}
+.menu{
+    .item-md{
+        background-color: #1E2D3E;
+        color: white;
+    }
+    .item-ios{
+        background-color: #1E2D3E;
+        color: white;
+    }
+    .list-md .item-block .item-inner{
+        border-bottom: none;
+    }
+    .list-ios .item-block .item-inner{
+        border-bottom: none;
+    }
+}
+.list-second{
+    margin-top: 100px;
+    border-top: 1px solid #C0CCDA;
+}
+}

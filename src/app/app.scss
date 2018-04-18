@@ -1,16 +1,100 @@
-// http://ionicframework.com/docs/theming/
+//android Classes
+
+.button-md{
+    height: 5rem;
+    background-color: #47525E;
+}
+
+.toolbar-title-md{
+    color: white;
+}
+.toolbar-background-md{
+    background-color: #C0CCDA;
+}
+.label-md-primary, .item-input .label-md-primary, .item-select .label-md-primary, .item-datetime .label-md-primary{
+    color: #C0CCDA;
+}
+.item-input-has-focus .label-md[stacked], .input-has-focus .label-md[stacked], .item-input-has-focus .label-md[floating], .input-has-focus .label-md[floating]{
+    color: #C0CCDA;    
+}
+.item-md{
+    padding: 0 10px;
+}
+.list-md .item-input.item-input-has-focus:last-child, .list-md .item-input.input-has-focus:last-child{
+    border-bottom-color: #47525E;
+}
+.item-md.item-input.ng-invalid.ng-touched:not(.input-has-focus):not(.item-input-has-focus) .item-inner{
+    // border-bottom-color: #47525E;
+    box-shadow: none;
+}
+.item-md.item-input.item-input-has-focus .item-inner, .item-md.item-input.input-has-focus .item-inner{
+    border-bottom-color: #47525E;
+    box-shadow: none;    
+}
+.bar-button-md[icon-only] ion-icon{
+    color: white;
+}
+.back-button-icon-md{
+    color: white;
+}
+.bar-button-menutoggle-md ion-icon{
+    color: white;
+}
 
 
-// App Global Sass
-// --------------------------------------------------
-// Put style rules here that you want to apply globally. These
-// styles are for the entire app and not just one component.
-// Additionally, this file can be also used as an entry point
-// to import other Sass files to be included in the output CSS.
-//
-// Shared Sass variables, which can be used to adjust Ionic's
-// default Sass variables, belong in "theme/variables.scss".
-//
-// To declare rules for a specific mode, create a child rule
-// for the .md, .ios, or .wp mode classes. The mode class is
-// automatically applied to the <body> element in the app.
+
+//IOS classes
+
+
+.toolbar-title-ios{
+    color: white;
+}
+.toolbar-background-ios{
+    background-color: #C0CCDA;
+}
+.label-ios-primary, .item-input .label-ios-primary, .item-select .label-ios-primary, .item-datetime .label-ios-primary{
+    color: #C0CCDA;
+}
+.item-input-has-focus .label-ios[stacked], .input-has-focus .label-ios[stacked], .item-input-has-focus .label-ios[floating], .input-has-focus .label-ios[floating]{
+    color: #C0CCDA;    
+}
+.item-ios{
+    padding: 0 10px;
+}
+.list-ios .item-input.item-input-has-focus:last-child, .list-ios .item-input.input-has-focus:last-child{
+    border-bottom-color: #47525E;
+}
+.item-ios.item-input.ng-invalid.ng-touched:not(.input-has-focus):not(.item-input-has-focus) .item-inner{
+    // border-bottom-color: #47525E;
+    box-shadow: none;
+}
+.item-md.item-input.item-input-has-focus .item-inner, .item-md.item-input.input-has-focus .item-inner{
+    border-bottom-color: #47525E;
+    box-shadow: none;    
+}
+.bar-button-ios[icon-only] ion-icon{
+    color: white;
+}
+.back-button-icon-ios{
+    color: white;
+}
+.bar-button-menutoggle-ios ion-icon{
+    color: white;
+}
+
+
+
+//global classes
+.color-header-background{
+    background-color: #C0CCDA;
+}
+
+.image{
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.error{
+    color: #f53d3d;
+    margin: 5px 10px;
+}

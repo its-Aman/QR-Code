@@ -1,0 +1,28 @@
+<ion-header>
+  <ion-navbar *ngIf="!isSearch">
+    <ion-title>Search Attendants</ion-title>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="search('button')">
+        <ion-icon ios="md-search" md="md-search"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+  <ion-navbar *ngIf="isSearch">
+    <ion-searchbar [(ngModel)]="searchKey" [showCancelButton]="shouldShowCancel" (ionInput)="onInput($event)" (ionClear)="search('ionClear')">
+    </ion-searchbar>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content no-padding>
+  <ion-list no-lines>
+    <ion-item *ngFor="let attendant of attendants; let i=index;" (click)="openDetails(i)">
+      <p class="name">{{attendant?.name}}</p>
+      <p [class.red]="attendant?.isRead" class="time">{{attendant?.time}}</p>
+    </ion-item>
+  </ion-list>
+</ion-content>

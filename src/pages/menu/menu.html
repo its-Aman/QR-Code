@@ -1,0 +1,34 @@
+<ion-menu [content]="content">
+  <ion-header>
+    <!-- <ion-toolbar>
+      <ion-title>Smart City Conference </ion-title>
+      <p>Carnegie Hall, Seattle Univ., WA</p>
+    </ion-toolbar> -->
+    <ion-grid class="menu-header-grid">
+      <ion-row class="menu-header">
+        <ion-col col-12 class="menu-header-row">
+          <h2>Smart City Conference</h2>
+          <p>Carnegie Hall, Seattle Univ., WA</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-header>
+
+  <ion-content class="menu">
+    <ion-list text-center>
+      <button menuClose ion-item (click)="scanQRCode()"> Scan QRCodes </button>
+      <button menuClose ion-item (click)="syncToServer()"> Sync to server </button>
+      <button menuClose ion-item (click)="cleanEventData()"> Clean event data </button>
+      <button menuClose ion-item (click)="changeEvent()"> Change event </button>
+    </ion-list>
+
+    <ion-list text-center class="list-second">
+      <button menuClose ion-item (click)="settings()"> Settings </button>
+      <button menuClose ion-item (click)="signout()"> Sign Out </button>
+    </ion-list>
+  </ion-content>
+
+</ion-menu> -->
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootMenuPage" #content swipeBackEnabled="false"></ion-nav>
