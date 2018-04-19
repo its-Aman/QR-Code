@@ -46,4 +46,21 @@ page-search-attendants {
 .searchbar-ios .searchbar-clear-icon{
     height: 90%;
 }
+.toolbar .searchbar-ios .searchbar-input{
+    background: none;
+}
+.searchbar-ios .searchbar-input{
+    border-radius: 0px;
+    font-size: 1.5rem;
+    font-weight: 500;
+    height: 3.5rem;
+}
+.searchbar-ios{
+    padding: 3px;
+    border-top: none;
+    border-bottom: none;
+}
+.button-clear-ios{
+    color: white;
+}
 }

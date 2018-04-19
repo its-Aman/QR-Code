@@ -70,4 +70,24 @@ page-attendant-detail {
     ion-footer{
         width: 98%;
     }
+    .in-valid-div{
+        border-radius: 20px;
+        background-color: #E8EEFF;
+        height: 80%;
+        display: flex;
+        justify-content: center;
+        font-size: 18px;
+        padding: 15px 35px;
+        position: absolute;
+        top: -25px;
+    }
+    i{
+        p{
+            padding: 0 35px;
+            margin: 5px
+        }
+    }
+    .in-valid-description-div {
+        margin-top: 75px;
+    }
 }

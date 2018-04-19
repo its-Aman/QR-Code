@@ -13,16 +13,16 @@ export class SearchAttendantsPage {
   shouldShowCancel: boolean = true;
   searchKey: string;
   attendants: any[] = [
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false },
-    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: false, isValid: true },
+    { name: 'Mr. Arnub gawde', time: '06:51', isRead: true, isValid: true },
   ]
 
   constructor(

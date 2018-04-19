@@ -1,6 +1,6 @@
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, AlertController, AlertButton } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -15,7 +15,8 @@ export class MenuPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public global: GlobalProvider,
-    public app: App
+    public app: App,
+    public alertCtrl: AlertController,
   ) { }
 
   ionViewDidLoad() {
@@ -24,26 +25,32 @@ export class MenuPage {
 
   scanQRCode() {
     this.global.log('clicked scanQRCode');
-    this.rootMenuPage = 'ScanQrCodePage';
+    this.navCtrl.push('ScanQrCodePage', { data: null });
   }
 
   syncToServer() {
     this.global.log('clicked syncToServer');
-    this.rootMenuPage = 'SearchAttendantsPage';    
+    this.showAlert(`Server Message`, `Synchronization successfull`);
+    // this.navCtrl.push('SearchAttendantsPage', {data: null});    
   }
 
   cleanEventData() {
     this.global.log('clicked cleanEventData');
-    this.rootMenuPage = 'SearchAttendantsPage';    
+    this.showAlert(`Warning`, `The information not sent will be lost. Are you sure?`, () => {
+      this.global.log('Clearing event log data');
+    });
+    // this.navCtrl.push('SearchAttendantsPage', {data: null});    
+
   }
 
   changeEvent() {
     this.global.log('clicked changeEvent');
-    this.rootMenuPage = 'SelectActiveEventPage';
+    this.navCtrl.push('SelectActiveEventPage', { data: null });
   }
 
   settings() {
     this.global.log('clicked settings');
+    this.navCtrl.push('SettingsPage', { data: null });
   }
 
   signout() {
@@ -51,5 +58,34 @@ export class MenuPage {
     this.app.getRootNav().setRoot('LoginPage');
   }
 
+  showAlert(title: string, subTitle: string, ok_callback?: Function) {
+    let buttons: AlertButton[] = [{
+      text: 'OK',
+      handler: () => {
+        this.global.log('OK pressed');
+
+        if (ok_callback) {
+          ok_callback();
+        }
+
+        alert.dismiss();
+      }
+    }];
+
+    if (ok_callback) {
+      buttons.push({
+        text: 'Cancle',
+        role: 'cancle'
+      });
+    }
+
+    let alert = this.alertCtrl.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: buttons,
+      enableBackdropDismiss: true,
+    });
+    alert.present();
+  }
 
 }

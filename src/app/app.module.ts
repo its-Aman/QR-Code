@@ -9,6 +9,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { GlobalProvider } from '../providers/global/global';
 import { HttpClientModule } from '@angular/common/http';
 
+import { QRScanner } from '@ionic-native/qr-scanner';
+
 @NgModule({
   declarations: [ 
     MyApp
@@ -16,7 +18,12 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     BrowserModule,
     HttpClientModule,
-    IonicModule.forRoot(MyApp),
+    IonicModule.forRoot(MyApp, {
+      backButtonIcon: 'md-arrow-back',
+      iconMode: 'md',
+      backButtonText: '',
+      // mode: 'md'
+    }),
   ],
   bootstrap: [IonicApp],
   entryComponents: [ 
@@ -26,7 +33,9 @@ import { HttpClientModule } from '@angular/common/http';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    GlobalProvider
+    GlobalProvider,
+
+    QRScanner
   ]
 })
 export class AppModule {}

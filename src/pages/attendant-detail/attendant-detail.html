@@ -14,18 +14,37 @@
         <div class="backImage image"></div>
       </ion-col>
     </ion-row>
-    <ion-row class="userImageRow" text-center>
+    <ion-row class="userImageRow" text-center *ngIf="attendant?.isValid">
       <ion-col col-12 text-center>
         <div class="userImage image"></div>
       </ion-col>
     </ion-row>
-    <ion-row text-center>
+
+    <ion-row class="userImageRow" text-center *ngIf="!attendant?.isValid">
+      <ion-col col-8 offset-2 text-center>
+        <div class="in-valid-div">
+          Unrecognized ticket
+        </div>
+      </ion-col>
+    </ion-row>
+
+    <ion-row text-center *ngIf="attendant?.isValid">
       <ion-col col-12 class="name"> {{attendant?.name}} </ion-col>
       <ion-col col-12 class="profession"> {{attendant?.profession}} CTO at marvel prototyping </ion-col>
       <ion-col col-12 class="ticket-details"> {{attendant?.ticketDetails}} Ticket: General attendance </ion-col>
       <ion-col col-12 class="ticket-time"> {{attendant?.ticketTime}} 06:45 PM </ion-col>
     </ion-row>
 
+    <ion-row text-center *ngIf="!attendant?.isValid">
+      <ion-col col-12>
+        <div class="in-valid-description-div">
+          <i>
+            <p>The scanned QRCode doesn't exist here.</p>
+            <p>Please sync with server or contact support.</p>
+          </i>
+        </div>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>
 

@@ -13,7 +13,7 @@ ion-menu{
     }
 }
 .menu-header-grid{
-    background-color: #1E2D3E;
+    background-color: #263445;
     color: white;
 }
 .menu{
@@ -35,5 +35,12 @@ ion-menu{
 .list-second{
     margin-top: 100px;
     border-top: 1px solid #C0CCDA;
+}
+
+.list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block{
+    border-bottom: none;   
+}
+.list-ios > .item-block:first-child{
+    border-top: none;
 }
 }
