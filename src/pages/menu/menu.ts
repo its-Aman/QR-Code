@@ -74,8 +74,8 @@ export class MenuPage {
 
     if (ok_callback) {
       buttons.push({
-        text: 'Cancle',
-        role: 'cancle'
+        text: 'Cancel',
+        role: 'cancel'
       });
     }
 

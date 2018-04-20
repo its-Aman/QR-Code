@@ -22,7 +22,7 @@ import { QRScanner } from '@ionic-native/qr-scanner';
       backButtonIcon: 'md-arrow-back',
       iconMode: 'md',
       backButtonText: '',
-      // mode: 'md'
+      mode: 'md'
     }),
   ],
   bootstrap: [IonicApp],
