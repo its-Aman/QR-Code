@@ -28,7 +28,7 @@ export class LoginPage {
 
   initForm() {
     this.loginForm = this.fb.group({
-      email: [null, [Validators.required, Validators.email]],
+      username: [null, [Validators.required, Validators.email]],
       password: [null, [Validators.required]]
     });
   }
@@ -48,7 +48,24 @@ export class LoginPage {
 
     if (this.loginForm.valid) {
       this.global.log('form is valid');
-      this.navCtrl.setRoot('SelectActiveEventPage', {data: null});
+      let data = this.loginForm.value;
+      data['client_id'] = this.global.client_id;
+      data['client_secret'] = this.global.client_secret;
+      data['grant_type'] = this.global.grant_type;
+
+      this.global.log('data to be posted is ', data);
+      this.global.showLoader();
+      this.global.postRequestUnauthorize('http://private-amnesiac-bf0d54-eventonline.apiary-proxy.com/oauth2/authorize', data).subscribe(res => {
+        this.global.hideLoader();
+        this.global.log('api response', res);
+        this.global.showMessage('Login successfull!!!');
+        localStorage.setItem('login-response', JSON.stringify(res));
+        this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
+      }, err => {
+        this.global.hideLoader();
+        this.global.log('api response error', err);
+      });
+
     } else {
       this.isFormInvalid = true;
     }

@@ -51,6 +51,7 @@ export class SelectActiveEventPage {
 
     if (this.selectEventForm.valid) {
       this.global.log('form is valid');
+      localStorage.setItem('event-selected', JSON.stringify(this.eventList[this.selectEventForm.value.event]));
       this.navCtrl.setRoot('MenuPage', { data: null });
     } else {
       this.isFormInvalid = true;

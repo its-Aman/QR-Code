@@ -31,10 +31,10 @@
           <ion-list>
             <ion-item>
               <ion-label color="primary" floating>Email</ion-label>
-              <ion-input formControlName="email" type="email"></ion-input>
+              <ion-input formControlName="username" type="email"></ion-input>
             </ion-item>
-            <p class="error" *ngIf="loginForm?.controls['email']?.hasError('required') && (loginForm?.controls['email']?.dirty || isFormInvalid)">Email is Required</p>
-            <p class="error" *ngIf="loginForm?.controls['email']?.hasError('email') && (loginForm?.controls['email']?.dirty || isFormInvalid)">Not a valid email</p>
+            <p class="error" *ngIf="loginForm?.controls['username']?.hasError('required') && (loginForm?.controls['username']?.dirty || isFormInvalid)">Email is Required</p>
+            <p class="error" *ngIf="loginForm?.controls['username']?.hasError('email') && (loginForm?.controls['username']?.dirty || isFormInvalid)">Not a valid email</p>
 
             <ion-item>
               <ion-label color="primary" floating>Password</ion-label>

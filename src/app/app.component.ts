@@ -13,7 +13,15 @@ export class MyApp {
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
-
+    if (localStorage.getItem(`login-response`)) {
+      if (localStorage.getItem('event-selected')) {
+        this.rootPage = 'MenuPage';
+      } else {
+        this.rootPage = 'SelectActiveEventPage';
+      }
+    } else {
+      this.rootPage = 'LoginPage';
+    }
   }
 
   initializeApp() {
