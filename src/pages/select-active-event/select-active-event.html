@@ -22,8 +22,8 @@
         <form [formGroup]="selectEventForm">
           <ion-item>
             <ion-label>Select event</ion-label>
-            <ion-select formControlName="event">
-              <ion-option *ngFor="let event of eventList" [value]="event?.value">{{event.text}}</ion-option>
+            <ion-select formControlName="event" [selectOptions]="{'cssClass': 'eventList'}">
+              <ion-option *ngFor="let event of eventList" [value]="event?.id">{{event.name}}</ion-option>
             </ion-select>
           </ion-item>
           <p class="error" *ngIf="selectEventForm.controls['event']?.hasError('required') && (selectEventForm.controls['event']?.dirty || isFormInvalid)">Event is Required</p>

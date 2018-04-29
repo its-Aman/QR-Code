@@ -23,8 +23,15 @@ export class ScanQrCodePage {
     this.global.log('ionViewDidLoad ScanQrCodePage');
     this.qrScanner.prepare().then((res: QRScannerStatus) => {
       this.global.log('prepare status is ', res);
+      this.scanQR_Code().then(res => {
+        this.global.log('scanQR_Code in ionViewDidLoad', res);
+        this.navCtrl.push('AttendantDetailPage', { data: res });
+      });
     }).catch(err => {
       this.global.log("some error in prepare", err);
+      if (err.code == 1) {
+        this.global.showMessage(`The app needs the camera to scan QR codes`);
+      }
     });
   }
 

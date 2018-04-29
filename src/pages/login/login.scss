@@ -1,39 +1,38 @@
 page-login {
-.userImageRow{
-    position: relative;
-    display: flex;
-    height: 65px;
-}
-.userImage{
-    position: absolute;
-    top: -40px;
-    left: calc(50% - 50px);
-    margin: auto;
-    border-radius: 64px;
-    height: 100px;
-    width: 100px;
-    background-image: url('http://via.placeholder.com/100x100');    
-}
-.backImageRow{
-    position: relative;
-}
-.backImage{
-    height: 150px;
-    width: 100%;    
-    background-image: url('../assets/imgs/events.jpg');
-}
-.grid{
-    padding: 0;
-}
-[col-12]{
-    padding: 0;
-}
-.loginButton{
-    margin-top: 100px;
-    padding: 0 20px;
-}
-.forgotText{
-padding-right: 20px;
-font-size: 18px;
-}
+    .userImageRow{
+        position: relative;
+        display: flex;
+        height: 65px;
+    }
+    .userImage{
+        position: absolute;
+        top: -40px;
+        left: calc(50% - 50px);
+        margin: auto;
+        border-radius: 64px;
+        height: 100px;
+        width: 100px;
+        background-image: url('http://via.placeholder.com/100x100');    
+    }
+    .backImageRow{
+        position: relative;
+    }
+    .backImage{
+        height: 200px;
+        width: 100%;    
+        background-image: url('../assets/imgs/events.jpg');
+    }
+    .grid{
+        padding: 0;
+    }
+    [col-12]{
+        padding: 0;
+    }
+    .loginButton{
+        margin-top: 100px;
+        padding: 0 20px;
+    }
+    .forgotText{
+        padding-right: 20px;
+    }
 }

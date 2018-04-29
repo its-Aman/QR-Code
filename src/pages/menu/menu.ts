@@ -1,3 +1,4 @@
+import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, App, AlertController, AlertButton } from 'ionic-angular';
@@ -17,6 +18,7 @@ export class MenuPage {
     public global: GlobalProvider,
     public app: App,
     public alertCtrl: AlertController,
+    private db: DatabaseProvider
   ) { }
 
   ionViewDidLoad() {
@@ -55,6 +57,8 @@ export class MenuPage {
 
   signout() {
     this.global.log('clicked signout');
+    // localStorage.clear();
+    this.db.clear();
     this.app.getRootNav().setRoot('LoginPage');
   }
 

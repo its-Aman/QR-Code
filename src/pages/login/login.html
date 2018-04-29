@@ -21,7 +21,11 @@
     </ion-row>
     <ion-row class="userImageRow" text-center>
       <ion-col col-12 text-center>
-        <div class="userImage image"></div>
+        <!-- <div class="userImage image"></div> -->
+        <div class="defaultUser">
+          <ion-icon ios="md-person" md="md-person"></ion-icon>
+        </div>
+
       </ion-col>
     </ion-row>
 
@@ -31,14 +35,14 @@
           <ion-list>
             <ion-item>
               <ion-label color="primary" floating>Email</ion-label>
-              <ion-input formControlName="username" type="email"></ion-input>
+              <ion-input formControlName="username" type="email" (keyup.enter)="login()"></ion-input>
             </ion-item>
             <p class="error" *ngIf="loginForm?.controls['username']?.hasError('required') && (loginForm?.controls['username']?.dirty || isFormInvalid)">Email is Required</p>
             <p class="error" *ngIf="loginForm?.controls['username']?.hasError('email') && (loginForm?.controls['username']?.dirty || isFormInvalid)">Not a valid email</p>
 
             <ion-item>
               <ion-label color="primary" floating>Password</ion-label>
-              <ion-input formControlName="password" type="password"></ion-input>
+              <ion-input formControlName="password" type="password" (keyup.enter)="login()"></ion-input>
             </ion-item>
             <p class="error" *ngIf="loginForm?.controls['password']?.hasError('required') && (loginForm?.controls['password']?.dirty || isFormInvalid)">Password is Required</p>
           </ion-list>

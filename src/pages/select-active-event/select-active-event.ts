@@ -1,3 +1,4 @@
+import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -13,33 +14,41 @@ export class SelectActiveEventPage {
   selectEventForm: FormGroup;
   isFormInvalid: boolean = false;
 
-  eventList: any[] = [
-    { value: '1', text: '1 value value value value value value value' },
-    { value: '2', text: '2 value value value value value value value' },
-    { value: '3', text: '3 value value value value value value value' },
-    { value: '4', text: '4 value value value value value value value' },
-    { value: '5', text: '5 value value value value value value value' },
-    { value: '6', text: '6 value value value value value value value' },
-    { value: '7', text: '7 value value value value value value value' },
-  ];
+  eventList: any[];
 
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public fb: FormBuilder,
-    public global: GlobalProvider
+    public global: GlobalProvider,
+    private db: DatabaseProvider
   ) {
     this.initForm();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SelectActiveEventPage');
+    this.getEventList();
   }
 
   initForm() {
     this.selectEventForm = this.fb.group({
-      event: [this.eventList[0].value, [Validators.required]]
+      event: [null, [Validators.required]]
     });
+  }
+
+  getEventList() {
+    this.global.showLoader();
+    this.global.getRequest(this.global.base_path + 'api/v1/events?tickets=true')
+      .subscribe(res => {
+        this.global.hideLoader();
+        this.global.log('getList data', res);
+        this.eventList = res;
+        this.selectEventForm.controls['event'].setValue(this.eventList[0].id);
+      }, err => {
+        this.global.hideLoader();
+        this.global.log('getList error', err);
+      });
   }
 
   openMenu() {
@@ -51,8 +60,10 @@ export class SelectActiveEventPage {
 
     if (this.selectEventForm.valid) {
       this.global.log('form is valid');
-      localStorage.setItem('event-selected', JSON.stringify(this.eventList[this.selectEventForm.value.event]));
-      this.navCtrl.setRoot('MenuPage', { data: null });
+      let data = this.eventList.find(val => val.id == this.selectEventForm.controls['event'].value);
+      this.db.create('event-selected', data);
+      // localStorage.setItem('event-selected', JSON.stringify(data));
+      this.navCtrl.setRoot('MenuPage', { data: data });
     } else {
       this.isFormInvalid = true;
     }

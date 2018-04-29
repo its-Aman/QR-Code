@@ -1,3 +1,4 @@
+import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
@@ -17,7 +18,8 @@ export class LoginPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public fb: FormBuilder,
-    public global: GlobalProvider
+    public global: GlobalProvider,
+    private db: DatabaseProvider
   ) {
     this.initForm();
   }
@@ -55,16 +57,18 @@ export class LoginPage {
 
       this.global.log('data to be posted is ', data);
       this.global.showLoader();
-      this.global.postRequestUnauthorize('http://private-amnesiac-bf0d54-eventonline.apiary-proxy.com/oauth2/authorize', data).subscribe(res => {
-        this.global.hideLoader();
-        this.global.log('api response', res);
-        this.global.showMessage('Login successfull!!!');
-        localStorage.setItem('login-response', JSON.stringify(res));
-        this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
-      }, err => {
-        this.global.hideLoader();
-        this.global.log('api response error', err);
-      });
+      this.global.postRequestUnauthorize(this.global.base_path + 'oauth2/authorize', data)
+        .subscribe(res => {
+          this.global.hideLoader();
+          this.global.log('api response', res);
+          this.global.showMessage('Login successfull!!!');
+          this.db.create('login-response', res);
+          // localStorage.setItem('login-response', JSON.stringify(res));
+          this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
+        }, err => {
+          this.global.hideLoader();
+          this.global.log('api response error', err);
+        });
 
     } else {
       this.isFormInvalid = true;

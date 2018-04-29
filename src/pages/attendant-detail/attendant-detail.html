@@ -14,13 +14,16 @@
         <div class="backImage image"></div>
       </ion-col>
     </ion-row>
-    <ion-row class="userImageRow" text-center *ngIf="attendant?.isValid">
+    <ion-row class="userImageRow" text-center *ngIf="!attendant?.isValid">
       <ion-col col-12 text-center>
-        <div class="userImage image"></div>
+        <!-- <div class="userImage image"></div> -->
+        <div class="defaultUser">
+          <ion-icon ios="md-person" md="md-person"></ion-icon>
+        </div>
       </ion-col>
     </ion-row>
 
-    <ion-row class="userImageRow" text-center *ngIf="!attendant?.isValid">
+    <ion-row class="userImageRow" text-center *ngIf="attendant?.isValid">
       <ion-col col-8 offset-2 text-center>
         <div class="in-valid-div">
           Unrecognized ticket
@@ -28,14 +31,14 @@
       </ion-col>
     </ion-row>
 
-    <ion-row text-center *ngIf="attendant?.isValid">
+    <ion-row text-center *ngIf="!attendant?.isValid">
       <ion-col col-12 class="name"> {{attendant?.name}} </ion-col>
-      <ion-col col-12 class="profession"> {{attendant?.profession}} CTO at marvel prototyping </ion-col>
-      <ion-col col-12 class="ticket-details"> {{attendant?.ticketDetails}} Ticket: General attendance </ion-col>
-      <ion-col col-12 class="ticket-time"> {{attendant?.ticketTime}} 06:45 PM </ion-col>
+      <ion-col col-12 class="profession"> {{event?.description}} </ion-col>
+      <ion-col col-12 class="ticket-details">Ticket: {{attendant?.ticket_type_id}}</ion-col>
+      <ion-col col-12 class="ticket-time"> {{attendant?.checked_in_at | date:'shortTime'}}</ion-col>
     </ion-row>
 
-    <ion-row text-center *ngIf="!attendant?.isValid">
+    <ion-row text-center *ngIf="attendant?.isValid">
       <ion-col col-12>
         <div class="in-valid-description-div">
           <i>
@@ -52,8 +55,8 @@
   <ion-grid class="footer-grid">
     <ion-row>
       <ion-col col-12>
-        <div class="place">Smart city conference</div>
-        <div class="place-2">Carnegie Hall, Seattle Univ., Washington</div>
+        <div class="place">{{event?.venue_name}}</div>
+        <div class="place-2">{{address?.formatted_address}}</div>
       </ion-col>
     </ion-row>
     <ion-row class="detail">

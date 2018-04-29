@@ -22,7 +22,8 @@
   <ion-list no-lines>
     <ion-item *ngFor="let attendant of attendants; let i=index;" (click)="openDetails(i)">
       <p class="name">{{attendant?.name}}</p>
-      <p [class.red]="attendant?.isRead" class="time">{{attendant?.time}}</p>
+      <p *ngIf="attendant?.checked_in_at" [class.red]="attendant?.isRead" class="time">{{attendant?.checked_in_at | date:'shortTime'}}</p>
+      <p *ngIf="!attendant?.checked_in_at" [class.red]="attendant?.isRead" class="time">&lt;not checked&gt;</p>
     </ion-item>
   </ion-list>
 </ion-content>

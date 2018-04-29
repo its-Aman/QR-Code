@@ -3,7 +3,7 @@ page-attendant-detail {
         position: relative;
     }
     .backImage{
-        height: 150px;
+        height: 200px;
         width: 100%;    
         background-image: url('http://via.placeholder.com/150x350');
     }
@@ -12,16 +12,15 @@ page-attendant-detail {
         display: flex;
         height: 65px;
     }
-    .userImage{
-        position: absolute;
-        top: -65px;
-        left: calc(50% - 50px);
-        margin: auto;
-        border-radius: 64px;
-        height: 100px;
-        width: 100px;
-        background-image: url('http://via.placeholder.com/100x100');    
-    }
+    // .userImage{
+        // position: absolute;
+        // top: -65px;
+        // left: calc(50% - 50px);
+        // margin: auto;
+        // border-radius: 64px;
+        // height: 100px;
+        // width: 100px;
+    // }
     .grid{
         padding: 0;
     }

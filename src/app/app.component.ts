@@ -1,5 +1,6 @@
+import { DatabaseProvider } from './../providers/database/database';
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -9,19 +10,49 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
-  rootPage: any = 'LoginPage';
+  rootPage;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(
+    public platform: Platform,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    private db: DatabaseProvider,
+    private events: Events,
+  ) {
+
     this.initializeApp();
-    if (localStorage.getItem(`login-response`)) {
-      if (localStorage.getItem('event-selected')) {
-        this.rootPage = 'MenuPage';
+
+    db.get(`login-response`).then(res => {
+      if (res) {
+        db.get(`event-selected`).then(res => {
+          if (res) {
+            this.rootPage = 'MenuPage';
+          } else {
+            this.rootPage = 'SelectActiveEventPage';
+          }
+        });
       } else {
-        this.rootPage = 'SelectActiveEventPage';
+        this.rootPage = 'LoginPage';
       }
-    } else {
+    });
+
+    // if (db.get(`login-response`)) {
+    //   if (db.get('event-selected')) {
+    //     this.rootPage = 'MenuPage';
+    //   } else {
+    //     this.rootPage = 'SelectActiveEventPage';
+    //   }
+    // } else {
+    //   this.rootPage = 'LoginPage';
+    // }
+  }
+
+  listenForTokenExpire() {
+    this.events.subscribe('token-expire', () => {
+      console.log('Token expires, now calling for login again');
       this.rootPage = 'LoginPage';
-    }
+    });
+
   }
 
   initializeApp() {

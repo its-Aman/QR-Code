@@ -114,3 +114,30 @@
     color: #f53d3d;
     margin: 5px 10px;
 }
+
+.eventList{
+    .alert-radio-label {
+        white-space: unset !important;
+    }
+}
+
+.defaultUser{
+    position: absolute;
+    top: -55px;
+    left: calc(50% - 50px);
+    margin: auto;
+    border-radius: 64px;
+    height: 100px;
+    width: 100px;
+    border: 1px solid lightgray;
+    background: #F0F2F7;
+    color: #C0CCDA;
+    
+    ion-icon{
+        font-size: 5.2em;
+        display: flex;
+        margin: auto;
+        justify-content: center;
+        padding-top: 10px;
+    }
+}
