@@ -19,11 +19,22 @@
 
 
 <ion-content no-padding>
-  <ion-list no-lines>
+  <ion-list no-lines *ngIf="!noData">
     <ion-item *ngFor="let attendant of attendants; let i=index;" (click)="openDetails(i)">
       <p class="name">{{attendant?.name}}</p>
       <p *ngIf="attendant?.checked_in_at" [class.red]="attendant?.isRead" class="time">{{attendant?.checked_in_at | date:'shortTime'}}</p>
       <p *ngIf="!attendant?.checked_in_at" [class.red]="attendant?.isRead" class="time">&lt;not checked&gt;</p>
     </ion-item>
   </ion-list>
+
+  <ion-grid class="no-data-grid" *ngIf="noData" text-center>
+    <ion-row>
+      <ion-col class="no-data">
+        <div class="chair image"></div>
+        <div>
+          No attendees found!
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

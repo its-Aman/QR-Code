@@ -1,6 +1,7 @@
+import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 
 @IonicPage()
@@ -10,22 +11,25 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 })
 export class ScanQrCodePage {
 
-  scanResult: any;
+  scanResult: any; //1FBEB142-843E-495F-A8E2-E59F0BE3162A
+  @ViewChild('content') content: Content
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private qrScanner: QRScanner,
-    private global: GlobalProvider
+    private global: GlobalProvider,
+    private db: DatabaseProvider
   ) {
   }
 
   ionViewDidLoad() {
-    this.global.log('ionViewDidLoad ScanQrCodePage');
+    this.global.log('ionViewDidLoad ScanQrCodePage', this.content.getNativeElement());
     this.qrScanner.prepare().then((res: QRScannerStatus) => {
       this.global.log('prepare status is ', res);
       this.scanQR_Code().then(res => {
         this.global.log('scanQR_Code in ionViewDidLoad', res);
-        this.navCtrl.push('AttendantDetailPage', { data: res });
+
       });
     }).catch(err => {
       this.global.log("some error in prepare", err);
@@ -35,40 +39,29 @@ export class ScanQrCodePage {
     });
   }
 
-  scanQR() {
-    this.qrScanner.show().then((res: QRScannerStatus) => {
-      this.global.log('prepare status is ', res);
-      if (res.authorized) {
-        this.qrScanner.useBackCamera();
-        let nowTimeHours = new Date().getHours();
-        if (nowTimeHours > 18 && nowTimeHours < 5) {
-          try {
-            res.lightEnabled
-              ?
-              this.qrScanner.enableLight()
-              :
-              this.qrScanner.disableLight();
-          } catch (e) { }
-        }
-        this.global.log('Now scanning', this.qrScanner);
-        let scanSubs = this.qrScanner.scan().subscribe(
-          (res: any) => {
-            this.global.log('got scanned result', res);
-            this.scanResult = res;
-            scanSubs.unsubscribe();
-          }, err => {
-            this.global.log('got error scanned result', err);
-            scanSubs.unsubscribe();
-          });
-        this.global.log('observable is', scanSubs);
-      } else {
-        this.global.log('permission not granted');
+  checkForUserPresentLocally(id: string) {
+    this.db.get('users').then((res: any[]) => {
+      this.global.log(`Got the users, now updating the time ${res}`);
+
+      if (res.length > 0) {
+        res.forEach((user, i) => {
+          if (user.id == id) {
+            this.global.log(`User found ${user}, now updating checked_in_time`);
+            res[i].checked_in_at = (new Date()).toISOString();
+            this.db.create('users', res)
+              .then(update => {
+                this.global.log(`Users updated successfully ${update}`);
+                this.navCtrl.push('AttendantDetailPage', { data: user });
+              }).catch(err => {
+                this.global.log(`Users updated error ${err}`);
+                this.navCtrl.push('AttendantDetailPage', { data: null });
+              });
+            return;
+          }
+        });
       }
-    }).catch(err => {
-      this.global.log("some error in show", err);
     });
   }
-
 
   async scanQR_Code(): Promise<string> {
     try {
@@ -90,11 +83,24 @@ export class ScanQrCodePage {
     return this.qrScanner.prepare()
       .then((status: QRScannerStatus) => {
         this.global.log('in _startScanner prepare', status);
+
+        let nowTimeHours = new Date().getHours();
+        if (nowTimeHours > 18 && nowTimeHours < 5) {
+          try {
+            status.lightEnabled
+              ?
+              this.qrScanner.enableLight()
+              :
+              this.qrScanner.disableLight();
+          } catch (e) { }
+        }
+
         return new Promise((resolve, reject) => {
           if (status.authorized) {
             // camera permission was granted
 
             const ionApp = <HTMLElement>document.getElementsByTagName("ion-app")[0];
+            const _content = this.content.getNativeElement();
             // start scanning
             let scanSub = this.qrScanner.scan().subscribe((text: string) => {
               this.global.log('in _startScanner prepare->promise->scan', status);
@@ -104,12 +110,14 @@ export class ScanQrCodePage {
 
               // hack to hide the app and show the preview
               ionApp.style.display = "block";
+              _content.style.display = "block";
 
               resolve(text);
             });
 
             // show camera preview
-            ionApp.style.display = "none";
+            _content.style.display = "contents";
+            ionApp.style.display = "contents";
             this.qrScanner.show();
           } else if (status.denied) {
             // camera permission was permanently denied
@@ -126,10 +134,10 @@ export class ScanQrCodePage {
   }
 
   submit(i: number) {
-    let data = { isValid: true };
     if (i == 0) {
-      data = { isValid: false };
+      this.navCtrl.push('AttendantDetailPage', { data: null });
+    } else {
+      this.navCtrl.push('AttendantDetailPage', { data: { isValid: true } });
     }
-    this.navCtrl.push('AttendantDetailPage', { data: data });
   }
 }

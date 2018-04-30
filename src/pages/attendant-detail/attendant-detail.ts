@@ -13,21 +13,28 @@ export class AttendantDetailPage {
   address: any;
   event: any;
   attendant: any;
-
+  isValid: boolean;
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     public global: GlobalProvider,
     private db: DatabaseProvider
   ) {
-    // this.event = JSON.parse((localStorage.getItem('event-selected')));
-    db.get('event-selected').then(res => {
-      this.event = res;
-      this.getAddress();
-    });
-
     this.attendant = this.navParams.get('data');
-    this.global.log('got attendent', this.attendant);
+    this.global.log(`got attendent ${this.attendant}`);
+
+    if (this.attendant) {
+      this.isValid = true;
+      db.get('event-selected').then(res => {
+        this.global.log(`event is ${this.event}`)
+        this.event = res;
+        this.getAddress();
+      });
+    } else {
+      this.isValid = false;
+      this.global.log(`Unautorize ticket`)
+    }
+
   }
 
   ionViewDidLoad() {

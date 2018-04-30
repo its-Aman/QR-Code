@@ -62,7 +62,6 @@ export class SelectActiveEventPage {
       this.global.log('form is valid');
       let data = this.eventList.find(val => val.id == this.selectEventForm.controls['event'].value);
       this.db.create('event-selected', data);
-      // localStorage.setItem('event-selected', JSON.stringify(data));
       this.navCtrl.setRoot('MenuPage', { data: data });
     } else {
       this.isFormInvalid = true;

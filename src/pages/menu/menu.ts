@@ -1,7 +1,7 @@
 import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, App, AlertController, AlertButton } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App, AlertController, AlertButton, Events } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -18,11 +18,17 @@ export class MenuPage {
     public global: GlobalProvider,
     public app: App,
     public alertCtrl: AlertController,
-    private db: DatabaseProvider
+    private db: DatabaseProvider,
+    private events: Events
   ) { }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MenuPage');
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter MenuPage');
+    this.events.publish('ionViewDidEnter-MenuPage');
   }
 
   scanQRCode() {
@@ -40,14 +46,19 @@ export class MenuPage {
     this.global.log('clicked cleanEventData');
     this.showAlert(`Warning`, `The information not sent will be lost. Are you sure?`, () => {
       this.global.log('Clearing event log data');
+      this.db.remove('users').then(res => {
+        this.db.remove('event-selected').then(res => {
+          this.global.showMessage(`Data Cleared Successfully`);
+        });
+      });
+      this.app.getRootNav().setRoot('SelectActiveEventPage', { data: null });
     });
-    // this.navCtrl.push('SearchAttendantsPage', {data: null});    
 
   }
 
   changeEvent() {
     this.global.log('clicked changeEvent');
-    this.navCtrl.push('SelectActiveEventPage', { data: null });
+    this.app.getRootNav().setRoot('SelectActiveEventPage', { data: null });
   }
 
   settings() {
@@ -57,7 +68,6 @@ export class MenuPage {
 
   signout() {
     this.global.log('clicked signout');
-    // localStorage.clear();
     this.db.clear();
     this.app.getRootNav().setRoot('LoginPage');
   }

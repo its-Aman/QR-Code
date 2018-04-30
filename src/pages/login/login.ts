@@ -63,7 +63,6 @@ export class LoginPage {
           this.global.log('api response', res);
           this.global.showMessage('Login successfull!!!');
           this.db.create('login-response', res);
-          // localStorage.setItem('login-response', JSON.stringify(res));
           this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
         }, err => {
           this.global.hideLoader();

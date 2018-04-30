@@ -5,7 +5,8 @@ page-attendant-detail {
     .backImage{
         height: 200px;
         width: 100%;    
-        background-image: url('http://via.placeholder.com/150x350');
+        // background-image: url('http://via.placeholder.com/150x350');
+        background-image: url('../assets/imgs/events.jpg');        
     }
     .userImageRow{
         position: relative;
@@ -45,7 +46,7 @@ page-attendant-detail {
     }
     .footer-grid{
         border-radius: 5px;
-        margin: 0 5px 0 5px;
+        margin: 0 5px 0 3px;
         background-color: #EFF2F7;
         padding: 0;
     }
@@ -88,5 +89,14 @@ page-attendant-detail {
     }
     .in-valid-description-div {
         margin-top: 75px;
+    }
+    .absouleteCenter{
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+        background-image: none;        
     }
 }

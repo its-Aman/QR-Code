@@ -10,7 +10,7 @@
 </ion-header>
 
 
-<ion-content no-padding>
+<ion-content no-padding #content>
   <div class="container">
     <ion-grid text-center>
       <ion-row (click)="submit(1)">
@@ -22,3 +22,7 @@
     </ion-grid>
   </div>
 </ion-content>
+
+<ion-footer>
+  {{scanResult}}
+</ion-footer>

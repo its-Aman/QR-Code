@@ -14,7 +14,7 @@
         <div class="backImage image"></div>
       </ion-col>
     </ion-row>
-    <ion-row class="userImageRow" text-center *ngIf="!attendant?.isValid">
+    <ion-row class="userImageRow" text-center *ngIf="isValid">
       <ion-col col-12 text-center>
         <!-- <div class="userImage image"></div> -->
         <div class="defaultUser">
@@ -23,7 +23,7 @@
       </ion-col>
     </ion-row>
 
-    <ion-row class="userImageRow" text-center *ngIf="attendant?.isValid">
+    <ion-row class="userImageRow" text-center *ngIf="!isValid">
       <ion-col col-8 offset-2 text-center>
         <div class="in-valid-div">
           Unrecognized ticket
@@ -31,14 +31,14 @@
       </ion-col>
     </ion-row>
 
-    <ion-row text-center *ngIf="!attendant?.isValid">
+    <ion-row text-center *ngIf="isValid">
       <ion-col col-12 class="name"> {{attendant?.name}} </ion-col>
       <ion-col col-12 class="profession"> {{event?.description}} </ion-col>
       <ion-col col-12 class="ticket-details">Ticket: {{attendant?.ticket_type_id}}</ion-col>
       <ion-col col-12 class="ticket-time"> {{attendant?.checked_in_at | date:'shortTime'}}</ion-col>
     </ion-row>
 
-    <ion-row text-center *ngIf="attendant?.isValid">
+    <ion-row text-center *ngIf="!isValid">
       <ion-col col-12>
         <div class="in-valid-description-div">
           <i>
@@ -59,17 +59,17 @@
         <div class="place-2">{{address?.formatted_address}}</div>
       </ion-col>
     </ion-row>
-    <ion-row class="detail">
+    <ion-row class="detail absouleteCenter">
       <ion-col col-2 text-right>
         <b>20</b>
       </ion-col>
-      <ion-col col-3 text-left class="detail-2">
+      <ion-col col-4 text-left class="detail-2">
         checked
       </ion-col>
       <ion-col col-2 text-right>
         <b>295</b>
       </ion-col>
-      <ion-col col-3 text-left class="detail-2">
+      <ion-col col-4 text-left class="detail-2">
         remaining
       </ion-col>
     </ion-row>

@@ -30,10 +30,15 @@
         </form>
       </ion-col>
     </ion-row>
-    <ion-row class="marginNext">
-      <ion-col col-12 class="nextButton">
-        <button ion-button block (click)="next()">NEXT</button>
+  </ion-grid>
+</ion-content>
+
+<ion-footer>
+  <ion-grid no-padding>
+    <ion-row>
+      <ion-col col-12 no-padding>
+        <button class="reset-button" ion-button block (click)="next()">NEXT</button>
       </ion-col>
     </ion-row>
   </ion-grid>
-</ion-content>
+</ion-footer>

@@ -1,66 +1,85 @@
 page-search-attendants {
-.close{
-    display: flex;
-    justify-content: center;
-    ion-icon{
-        font-size: 2.2em;
-        margin: auto;
+    .close{
+        display: flex;
+        justify-content: center;
+        ion-icon{
+            font-size: 2.2em;
+            margin: auto;
+            color: white;
+        }
+    }
+    .button-md{
+        background-color: #C0CCDA;
+    }
+    .button-ios{
+        background-color: #C0CCDA;
+    }
+    .red{
+        color: red;
+    }
+    .name{
+        font-size: 20px;
+    }
+    .time{
+        margin: 3px 0;
+    }
+    .searchbar-md .searchbar-input{
+        box-shadow: none;
+        background-color: #C0CCDA;
+        border-bottom: 1px solid #1E2D3E
+    }
+    .searchbar-md .searchbar-md-cancel{
+        height: 90%;
+    }
+    .searchbar-md .searchbar-clear-icon{
+        height: 90%;
+    }
+
+    .searchbar-ios .searchbar-input{
+        box-shadow: none;
+        background-color: #C0CCDA;
+        border-bottom: 1px solid #1E2D3E
+    }
+    .searchbar-ios .searchbar-ios-cancel{
+        height: 90%;
+    }
+    .searchbar-ios .searchbar-clear-icon{
+        height: 90%;
+    }
+    .toolbar .searchbar-ios .searchbar-input{
+        background: none;
+    }
+    .searchbar-ios .searchbar-input{
+        border-radius: 0px;
+        font-size: 1.5rem;
+        font-weight: 500;
+        height: 3.5rem;
+    }
+    .searchbar-ios{
+        padding: 3px;
+        border-top: none;
+        border-bottom: none;
+    }
+    .button-clear-ios{
         color: white;
     }
-}
-.button-md{
-    background-color: #C0CCDA;
-}
-.button-ios{
-    background-color: #C0CCDA;
-}
-.red{
-    color: red;
-}
-.name{
-    font-size: 20px;
-}
-.time{
-    margin: 3px 0;
-}
-.searchbar-md .searchbar-input{
-    box-shadow: none;
-    background-color: #C0CCDA;
-    border-bottom: 1px solid #1E2D3E
-}
-.searchbar-md .searchbar-md-cancel{
-    height: 90%;
-}
-.searchbar-md .searchbar-clear-icon{
-    height: 90%;
-}
+    .no-data-grid{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
 
-.searchbar-ios .searchbar-input{
-    box-shadow: none;
-    background-color: #C0CCDA;
-    border-bottom: 1px solid #1E2D3E
-}
-.searchbar-ios .searchbar-ios-cancel{
-    height: 90%;
-}
-.searchbar-ios .searchbar-clear-icon{
-    height: 90%;
-}
-.toolbar .searchbar-ios .searchbar-input{
-    background: none;
-}
-.searchbar-ios .searchbar-input{
-    border-radius: 0px;
-    font-size: 1.5rem;
-    font-weight: 500;
-    height: 3.5rem;
-}
-.searchbar-ios{
-    padding: 3px;
-    border-top: none;
-    border-bottom: none;
-}
-.button-clear-ios{
-    color: white;
-}
+        .no-data{
+            font-size: 20px;
+            font-weight: 600;
+
+            .chair{
+                margin: auto;
+                margin-bottom: 50px;
+                background-image: url('../assets/imgs/chair.png');
+                height: 150px;
+                width: 150px;
+            }
+        }
+    }
 }
