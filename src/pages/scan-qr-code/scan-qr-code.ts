@@ -22,14 +22,17 @@ export class ScanQrCodePage {
     private db: DatabaseProvider
   ) {
   }
-
   ionViewDidLoad() {
+    this.global.log('ionViewDidEnter ScanQrCodePage');
+  }
+
+  ionViewDidEnter() {
     this.global.log('ionViewDidLoad ScanQrCodePage', this.content.getNativeElement());
     this.qrScanner.prepare().then((res: QRScannerStatus) => {
       this.global.log('prepare status is ', res);
       this.scanQR_Code().then(res => {
         this.global.log('scanQR_Code in ionViewDidLoad', res);
-
+        this.checkForUserPresentLocally(res);
       });
     }).catch(err => {
       this.global.log("some error in prepare", err);
@@ -44,21 +47,24 @@ export class ScanQrCodePage {
       this.global.log(`Got the users, now updating the time ${res}`);
 
       if (res.length > 0) {
-        res.forEach((user, i) => {
-          if (user.id == id) {
-            this.global.log(`User found ${user}, now updating checked_in_time`);
-            res[i].checked_in_at = (new Date()).toISOString();
-            this.db.create('users', res)
-              .then(update => {
-                this.global.log(`Users updated successfully ${update}`);
-                this.navCtrl.push('AttendantDetailPage', { data: user });
-              }).catch(err => {
-                this.global.log(`Users updated error ${err}`);
-                this.navCtrl.push('AttendantDetailPage', { data: null });
-              });
-            return;
-          }
+        let user = res.find((user) => {
+          return user.id == id;
         });
+
+        if (user) {
+          this.global.log(`User found ${user}, now updating checked_in_time`);
+          res[res.indexOf(user)].checked_in_at = (new Date()).toISOString();
+          this.db.create('users', res)
+            .then(update => {
+              this.global.log(`Users updated successfully ${update}`);
+              this.navCtrl.push('AttendantDetailPage', { data: user });
+            }).catch(err => {
+              this.global.log(`Users updated error ${err}`);
+              this.navCtrl.push('AttendantDetailPage', { data: null });
+            });
+        } else {
+          this.navCtrl.push('AttendantDetailPage', { data: null });
+        }
       }
     });
   }
