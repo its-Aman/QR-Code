@@ -62,8 +62,11 @@ export class LoginPage {
           this.global.hideLoader();
           this.global.log('api response', res);
           this.global.showMessage('Login successfull!!!');
-          this.db.create('login-response', res);
-          this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
+          this.db.create('login-response', res).then(res => {
+            setTimeout(() => {
+              this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
+            }, 250);
+          });
         }, err => {
           this.global.hideLoader();
           this.global.log('api response error', err);
