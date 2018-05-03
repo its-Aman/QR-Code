@@ -3,6 +3,7 @@ import { GlobalProvider } from './../../providers/global/global';
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 @IonicPage()
 @Component({
@@ -19,15 +20,39 @@ export class ScanQrCodePage {
     public navParams: NavParams,
     private qrScanner: QRScanner,
     private global: GlobalProvider,
-    private db: DatabaseProvider
+    private db: DatabaseProvider,
+    private diagnostic: Diagnostic,
   ) {
   }
+
   ionViewDidLoad() {
     this.global.log('ionViewDidEnter ScanQrCodePage');
   }
 
   ionViewDidEnter() {
     this.global.log('ionViewDidLoad ScanQrCodePage', this.content.getNativeElement());
+    this.diagnostic.isCameraAuthorized().then(res => {
+      this.global.log(`Got the isCameraAuthorized res `, res);
+      if (res) {
+        this.finalScan();
+      } else {
+        this.diagnostic.requestCameraAuthorization().then(res => {
+          this.global.log(`Got the requestCameraAuthorization res `, res);
+          if (res) {
+            this.finalScan();
+          } else {
+            this.global.log(`App needs location to fetch data, please enable location and set location accuracy mode to high.`);
+          }
+        }).catch(err => {
+          this.global.log(`Got the requestCameraAuthorization error `, err);
+        });
+      }
+    }).catch(err => {
+      this.global.log(`Got the isCameraAuthorized error`, err);
+    });
+  }
+
+  finalScan() {
     this.qrScanner.prepare().then((res: QRScannerStatus) => {
       this.global.log('prepare status is ', res);
       this.scanQR_Code().then(res => {

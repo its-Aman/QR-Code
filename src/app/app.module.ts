@@ -11,6 +11,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { QRScanner } from '@ionic-native/qr-scanner';
 import { IonicStorageModule } from '@ionic/storage';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { GlobalProvider } from '../providers/global/global';
 import { NoopInterceptor } from '../providers/Interceptor/interceptor';
@@ -36,13 +37,14 @@ import { NoopInterceptor } from '../providers/Interceptor/interceptor';
     MyApp
   ],
   providers: [
-    StatusBar,
-    SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
+    StatusBar,
+    SplashScreen,
     GlobalProvider,
     QRScanner,
-    DatabaseProvider
+    DatabaseProvider,
+    Diagnostic,
   ]
 })
 export class AppModule { }

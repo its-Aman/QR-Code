@@ -84,5 +84,7 @@
     <plugin name="cordova-plugin-qrscanner" spec="^2.5.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.3.1" />
     <allow-navigation href="http://172.22.173.145:8100" />
+    <allow-navigation href="*" />
+    <plugin name="cordova.plugins.diagnostic" spec="^4.0.5" />
     <engine name="android" spec="7.0.0" />
 </widget>
