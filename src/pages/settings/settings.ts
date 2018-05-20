@@ -1,7 +1,7 @@
 import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Events } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -15,7 +15,8 @@ export class SettingsPage {
     public navParams: NavParams,
     public global: GlobalProvider,
     private db: DatabaseProvider,
-    private alrtCtrl: AlertController
+    private alrtCtrl: AlertController,
+    private events: Events,
   ) {
   }
 
@@ -59,7 +60,85 @@ export class SettingsPage {
   }
 
   soundAndNotification() {
-    this.global.log('in soundAndNotification()');
+    this.global.log('in soundAndNotification');
+    let alert = this.alrtCtrl.create({
+      inputs: [
+        {
+          type: 'radio',
+          label: 'Cycle',
+          value: 'cycle.mp3',
+          checked: JSON.parse(localStorage.getItem('sound')) == 'cycle.mp3',
+        },
+        {
+          type: 'radio',
+          label: 'Ding Ling',
+          value: 'ding_ling.mp3',
+          checked: JSON.parse(localStorage.getItem('sound')) == 'ding_ling.mp3',
+        },
+        {
+          type: 'radio',
+          label: 'HTC Reactive',
+          value: 'htc_reactive.mp3',
+          checked: JSON.parse(localStorage.getItem('sound')) == 'htc_reactive.mp3',
+        },
+        {
+          type: 'radio',
+          label: 'Mario Bros Powerup',
+          value: 'mario_bros_powerup.mp3',
+          checked: JSON.parse(localStorage.getItem('sound')) == 'mario_bros_powerup.mp3',
+        },
+        {
+          type: 'radio',
+          label: 'Alert Dew Drops',
+          value: 's3_alert_dew_drops.mp3',
+          checked: JSON.parse(localStorage.getItem('sound')) == 's3_alert_dew_drops.mp3.',
+        }],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Change',
+          handler: (val) => {
+            this.changeSound(val);
+          }
+        },
+      ]
+    });
+
+    alert.present();
+
   }
 
+  changeSound(val: any) {
+    this.global.log(`in changeSound and the selected value is`, val);
+    localStorage.setItem('sound', JSON.stringify(val));
+  }
+
+  changeBasePath() {
+    let alert = this.alrtCtrl.create({
+      inputs: [{
+        type: 'input',
+        placeholder: 'Type basepath',
+        value: JSON.parse(localStorage.getItem('basepath'))["0"] || this.global.base_path
+      }],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        },
+        {
+          text: 'Change',
+          handler: (val) => {
+            this.global.log(`in change basepath and the new basepath is `, val, val["0"]);
+            localStorage.setItem('basepath', JSON.stringify(val));
+            this.events.publish('basepat-changed', val["0"]);
+            this.global.base_path = val["0"];
+          }
+        }],
+    });
+
+    alert.present();
+  }
 }

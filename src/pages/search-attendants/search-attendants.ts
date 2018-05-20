@@ -33,10 +33,19 @@ export class SearchAttendantsPage {
       });
     });
 
+    this.events.subscribe('basepat-changed', data => {
+      this.global.log(`In basepat-changed`, data);
+      this.getAttendes();
+    });
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SearchAttendantsPage');
+  }
+
+  ionViewDidEnter() {
+    console.log('ionViewDidEnter SearchAttendantsPage');
   }
 
   getAttendes() {

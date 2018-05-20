@@ -4,6 +4,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { NativeAudio } from '@ionic-native/native-audio';
 
 @IonicPage()
 @Component({
@@ -22,11 +23,13 @@ export class ScanQrCodePage {
     private global: GlobalProvider,
     private db: DatabaseProvider,
     private diagnostic: Diagnostic,
+    private nativeAudio: NativeAudio,
   ) {
   }
 
   ionViewDidLoad() {
     this.global.log('ionViewDidEnter ScanQrCodePage');
+    // this.playSound();
   }
 
   ionViewDidEnter() {
@@ -135,6 +138,8 @@ export class ScanQrCodePage {
             // start scanning
             let scanSub = this.qrScanner.scan().subscribe((text: string) => {
               this.global.log('in _startScanner prepare->promise->scan', status);
+              //play sound
+              this.playSound();
 
               this.qrScanner.hide(); // hide camera preview
               scanSub.unsubscribe(); // stop scanning
@@ -162,6 +167,42 @@ export class ScanQrCodePage {
           }
         });
       });
+  }
+
+  playSound() {
+    let selectedSound = JSON.parse(localStorage.getItem('sound'));
+    this.global.log(`in play sound and the selected sound is`, selectedSound)
+    if (!selectedSound) {
+      this.global.showMessage(`Please select a sound in settings`);
+      return;
+    } else {
+      this.nativeAudio.preloadSimple(selectedSound, `assets/sounds/${selectedSound}`)
+        .then((res) => {
+          this.global.log(`in success callback of preload sample, `, res);
+          this.nativeAudio.play(selectedSound)
+            .then((res) => {
+              this.global.log(`in success callback of play, `, res);
+              setTimeout(() => {
+                this.nativeAudio.stop(selectedSound)
+                  .then(res => {
+                    this.global.log(`in success callback of stop, `, res);
+                  }).catch(err => {
+                    this.global.log(`in err callback of stop, `, err);
+                  });
+                this.nativeAudio.unload(selectedSound)
+                  .then(res => {
+                    this.global.log(`in success callback of unload, `, res);
+                  }).catch(err => {
+                    this.global.log(`in err callback of unload, `, err);
+                  });
+              }, 5000);
+            }).catch((err) => {
+              this.global.log(`in err callback of play, `, err);
+            });
+        }).catch((err) => {
+          this.global.log(`in err callback of preload sample, `, err);
+        });
+    }
   }
 
   submit(i: number) {

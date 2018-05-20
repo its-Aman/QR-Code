@@ -8,10 +8,12 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
+import { IonicStorageModule } from '@ionic/storage';
+
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { QRScanner } from '@ionic-native/qr-scanner';
-import { IonicStorageModule } from '@ionic/storage';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { NativeAudio } from '@ionic-native/native-audio';
 
 import { GlobalProvider } from '../providers/global/global';
 import { NoopInterceptor } from '../providers/Interceptor/interceptor';
@@ -42,9 +44,10 @@ import { NoopInterceptor } from '../providers/Interceptor/interceptor';
     StatusBar,
     SplashScreen,
     GlobalProvider,
-    QRScanner,
     DatabaseProvider,
+    QRScanner,
     Diagnostic,
+    NativeAudio,
   ]
 })
 export class AppModule { }

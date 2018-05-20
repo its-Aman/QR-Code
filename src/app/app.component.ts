@@ -1,3 +1,4 @@
+import { GlobalProvider } from './../providers/global/global';
 import { DatabaseProvider } from './../providers/database/database';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events } from 'ionic-angular';
@@ -18,9 +19,24 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private db: DatabaseProvider,
     private events: Events,
+    private global: GlobalProvider
   ) {
 
     this.initializeApp();
+
+    let sound = JSON.parse(localStorage.getItem('sound'));
+    let basePath = JSON.parse(localStorage.getItem('basepath'));
+
+    this.global.log(`preloaded sound is `, sound);
+    this.global.log(`preloaded basepath is `, basePath);
+
+    if (!sound) {
+      localStorage.setItem('sound', JSON.stringify('cycle.mp3'));
+    }
+
+    if (basePath && basePath["0"]) {
+      this.global.base_path = basePath["0"];
+    }
 
     db.get(`login-response`).then(res => {
       if (res) {

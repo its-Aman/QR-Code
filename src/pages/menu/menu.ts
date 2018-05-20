@@ -11,6 +11,7 @@ import { IonicPage, NavController, NavParams, App, AlertController, AlertButton,
 export class MenuPage {
 
   rootMenuPage: string = 'SearchAttendantsPage';
+  venueDetails: any = {};
 
   constructor(
     public navCtrl: NavController,
@@ -20,15 +21,38 @@ export class MenuPage {
     public alertCtrl: AlertController,
     private db: DatabaseProvider,
     private events: Events
-  ) { }
+  ) {
+    this.getEventDetails();
+  }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad MenuPage');
+    this.global.log('ionViewDidLoad MenuPage');
   }
 
   ionViewDidEnter() {
-    console.log('ionViewDidEnter MenuPage');
+    this.global.log('ionViewDidEnter MenuPage');
     this.events.publish('ionViewDidEnter-MenuPage');
+  }
+
+  getEventDetails() {
+    this.db.get('event-selected').then(res => {
+      this.global.log(`getEventDetails's data `, res);
+      this.venueDetails.eventName = res.venue_name;
+      this.getAddress(res.latitude, res.longitude);
+    }).catch(err => {
+      this.global.log(`getEventDetails's error `, err);
+    });
+  }
+
+  getAddress(lat, long) {
+    let url = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}`
+    this.global.getRequest(url)
+      .subscribe(res => {
+        this.global.log('address response', res);
+        this.venueDetails.address = res.results[0].formatted_address;
+      }, err => {
+        this.global.log('address error', err);
+      });
   }
 
   scanQRCode() {
