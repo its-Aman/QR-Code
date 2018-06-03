@@ -23,6 +23,7 @@ export class MyApp {
   ) {
 
     this.initializeApp();
+    this.listenForTokenExpire();
 
     let sound = JSON.parse(localStorage.getItem('sound'));
     let basePath = JSON.parse(localStorage.getItem('basepath'));

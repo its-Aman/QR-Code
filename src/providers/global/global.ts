@@ -6,33 +6,40 @@ import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { catchError, retry } from 'rxjs/operators';
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': 'my-auth-token'
-  })
-};
-
 @Injectable()
 export class GlobalProvider {
 
   private loader: Loading;
   public base_path: string;
 
-  public client_id: string = '';
-  public client_secret: string = '';
-  public grant_type: string = '';
+  /*
+  client_id=E3FDE09D-030C-4E78-B548-9888BF44
+  client_secret=my-secret
+  grant_type=password
+  username=smelgin@gmail.com
+  password=andrescock
+  */
+
+  public client_id: string = 'E3FDE09D-030C-4E78-B548-9888BF44';
+  public client_secret: string = 'my-secret';
+  public grant_type: string = 'password';
   public noNetwork: boolean = false;
 
+  public user = JSON.parse(localStorage.getItem('user'));
 
   constructor(
     private http: HttpClient,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private events: Events
+    private events: Events,
   ) {
     console.log('Hello GlobalProvider Provider');
-    this.base_path = 'http://private-amnesiac-bf0d54-eventonline.apiary-proxy.com/';
+
+    //testing server
+    // this.base_path = 'http://private-amnesiac-bf0d54-eventonline.apiary-proxy.com/';
+
+    //live server
+    this.base_path = 'http://eventonline.info:3500/';
   }
 
   private handleError(error: HttpErrorResponse) {
@@ -45,8 +52,8 @@ export class GlobalProvider {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
       console.error(
-        `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+        `Backend returned code `, error.status +
+        `body was: `, error.error);
       this.noNetwork = error.status == 0;
 
       if (error.status == 500) {
@@ -59,39 +66,61 @@ export class GlobalProvider {
   };
 
   getRequest(url: string) {
-    return this.http.get<any>(url)
+    this.log(`in getRequest and the user is`, this.user);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + this.user ? this.user.access_token : 'my-access-token',
+      })
+    };
+
+    return this.http.get<any>(url, httpOptions)
       .pipe(
-        retry(2),
+        // retry(1),
         catchError(this.handleError),
     );
   }
 
   postRequest(url: string, data: any) {
+    this.log(`in postRequest and the this.user is`, this.user);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + this.user ? this.user.access_token : 'my-access-token',
+      })
+    };
+
     return this.http.post<any>(url, data, httpOptions)
       .pipe(
-        retry(2),
+        // retry(1),
         catchError(this.handleError),
     );
   }
 
-  postRequestUnauthorize(url: string, data: any) {
-    let httpOptions: any = {
-      header: new HttpHeaders({
-        'Content-Type': 'application/json',
+  postRequestUnauthorised(url: string, data: any) {
+
+    this.log(`in postRequestUnauthorize and the data is`, data);
+
+    return this.http.post<any>(url, data, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/x-www-form-urlencoded'
       })
-    }
-      ;
-    return this.http.post<any>(url, data, httpOptions)
+    })
       .pipe(
-        retry(2),
+        // retry(1),
         catchError(this.handleError),
     );
   }
 
   putRequest(url: string, data: any) {
-    return this.http.put<any>(url, data)
+    this.log(`in putRequest and the this.user is`, this.user);
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Authorization': "Bearer " + this.user ? this.user.access_token : 'my-access-token',
+      })
+    };
+
+    return this.http.put<any>(url, data, httpOptions)
       .pipe(
-        retry(2),
+        // retry(1),
         catchError(this.handleError),
     );
   }
@@ -130,7 +159,7 @@ export class GlobalProvider {
 
   log(message?: any, ...optionalParams: any[]): void {
     console.log(message, ...optionalParams);
-    // console.log(JSON.stringify(message));
-    // console.log(JSON.stringify(optionalParams));
+
+    // alert(JSON.stringify(message) + JSON.stringify(optionalParams));
   }
 }

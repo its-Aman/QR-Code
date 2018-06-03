@@ -17,6 +17,7 @@ import { NativeAudio } from '@ionic-native/native-audio';
 
 import { GlobalProvider } from '../providers/global/global';
 import { NoopInterceptor } from '../providers/Interceptor/interceptor';
+import { HttpModule } from '@angular/http';
 
 
 @NgModule({
@@ -26,6 +27,7 @@ import { NoopInterceptor } from '../providers/Interceptor/interceptor';
   imports: [
     BrowserModule,
     HttpClientModule,
+    HttpModule,
     IonicModule.forRoot(MyApp, {
       backButtonIcon: 'md-arrow-back',
       iconMode: 'md',
@@ -40,7 +42,7 @@ import { NoopInterceptor } from '../providers/Interceptor/interceptor';
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
+    // { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
     StatusBar,
     SplashScreen,
     GlobalProvider,

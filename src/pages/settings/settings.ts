@@ -61,37 +61,40 @@ export class SettingsPage {
 
   soundAndNotification() {
     this.global.log('in soundAndNotification');
+    let selectedSound = JSON.parse(localStorage.getItem('sound'));
+
     let alert = this.alrtCtrl.create({
+      title: "Change Sound",
       inputs: [
         {
           type: 'radio',
           label: 'Cycle',
           value: 'cycle.mp3',
-          checked: JSON.parse(localStorage.getItem('sound')) == 'cycle.mp3',
+          checked: selectedSound == 'cycle.mp3',
         },
         {
           type: 'radio',
           label: 'Ding Ling',
           value: 'ding_ling.mp3',
-          checked: JSON.parse(localStorage.getItem('sound')) == 'ding_ling.mp3',
+          checked: selectedSound == 'ding_ling.mp3',
         },
         {
           type: 'radio',
           label: 'HTC Reactive',
           value: 'htc_reactive.mp3',
-          checked: JSON.parse(localStorage.getItem('sound')) == 'htc_reactive.mp3',
+          checked: selectedSound == 'htc_reactive.mp3',
         },
         {
           type: 'radio',
           label: 'Mario Bros Powerup',
           value: 'mario_bros_powerup.mp3',
-          checked: JSON.parse(localStorage.getItem('sound')) == 'mario_bros_powerup.mp3',
+          checked: selectedSound == 'mario_bros_powerup.mp3',
         },
         {
           type: 'radio',
           label: 'Alert Dew Drops',
           value: 's3_alert_dew_drops.mp3',
-          checked: JSON.parse(localStorage.getItem('sound')) == 's3_alert_dew_drops.mp3.',
+          checked: selectedSound == 's3_alert_dew_drops.mp3.',
         }],
       buttons: [
         {
@@ -108,7 +111,6 @@ export class SettingsPage {
     });
 
     alert.present();
-
   }
 
   changeSound(val: any) {
@@ -118,6 +120,7 @@ export class SettingsPage {
 
   changeBasePath() {
     let alert = this.alrtCtrl.create({
+      title: "Change BasePath",
       inputs: [{
         type: 'input',
         placeholder: 'Type basepath',

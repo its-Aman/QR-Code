@@ -10,6 +10,7 @@ import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 })
 export class SearchAttendantsPage {
 
+  noSearchResult: boolean;
   isSearch: boolean = false;
   shouldShowCancel: boolean = true;
   searchKey: string;
@@ -90,7 +91,18 @@ export class SearchAttendantsPage {
   }
 
   onInput(ev) {
-    this.global.log('onInput($event) clicked', ev);
+    this.global.log('onInput($event) clicked', this.searchKey, ev);
+    if (this.searchKey.length > 2) {
+      this.global.log('in if', this.searchKey);
+      this.attendants = this.attendants.filter(val => { return val.name.toLowerCase().includes(this.searchKey.toLowerCase()) });
+      this.noSearchResult = this.attendants.length == 0;
+    } else {
+      this.db.get('users').then(res => {
+        this.global.log(`In db.get.users ${res}`);
+        this.attendants = res;
+        this.noSearchResult = this.attendants.length == 0;
+      });
+    }
   }
 
   openDetails(i: number) {

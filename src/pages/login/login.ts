@@ -3,6 +3,7 @@ import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { HttpParams } from '@angular/common/http';
 
 @IonicPage()
 @Component({
@@ -49,19 +50,22 @@ export class LoginPage {
     this.global.log('Logging in', this.loginForm);
 
     if (this.loginForm.valid) {
-      this.global.log('form is valid');
-      let data = this.loginForm.value;
-      data['client_id'] = this.global.client_id;
-      data['client_secret'] = this.global.client_secret;
-      data['grant_type'] = this.global.grant_type;
 
-      this.global.log('data to be posted is ', data);
+      this.global.log('form is valid');
+
+      let _data = `client_id=${this.global.client_id}&client_secret=${this.global.client_secret}&grant_type=${this.global.grant_type}&username=${this.loginForm.controls['username'].value.replace('@', '%40')}&password=${this.loginForm.controls['password'].value}`;
+
+      this.global.log(`data to be posted is`, _data);
+
       this.global.showLoader();
-      this.global.postRequestUnauthorize(this.global.base_path + 'oauth2/authorize', data)
+      this.global.postRequestUnauthorised(this.global.base_path + 'oauth2/authorize', _data)
         .subscribe(res => {
           this.global.hideLoader();
           this.global.log('api response', res);
           this.global.showMessage('Login successfull!!!');
+          this.global.user = res;
+          localStorage.setItem('user', JSON.stringify(res));
+          localStorage.setItem('token', res.access_token);
           this.db.create('login-response', res).then(res => {
             setTimeout(() => {
               this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
