@@ -39,27 +39,28 @@ export class SelectActiveEventPage {
 
   getEventList() {
     this.global.showLoader();
-    this.global.getRequest(this.global.base_path + 'api/v1/events?tickets=true')
+    this.global.getRequest(this.global.base_path + `api/v1/events?active=true&latitude=&longitude=&radio=&tickets=true&search=`)
       .subscribe(res => {
         this.global.hideLoader();
-        this.global.log('getList data', res);
+        this.global.isTokenExpire = false;
+        this.global.cLog('getList data', res);
         this.eventList = res;
         this.selectEventForm.controls['event'].setValue(this.eventList[0].id);
       }, err => {
         this.global.hideLoader();
-        this.global.log('getList error', err);
+        this.global.cLog('getList error', err);
       });
   }
 
   openMenu() {
-    this.global.log('Opening menu');
+    this.global.cLog('Opening menu');
   }
 
   next() {
-    this.global.log('next called', this.selectEventForm);
+    this.global.cLog('next called', this.selectEventForm);
 
     if (this.selectEventForm.valid) {
-      this.global.log('form is valid');
+      this.global.cLog('form is valid');
       let data = this.eventList.find(val => val.id == this.selectEventForm.controls['event'].value);
       this.db.create('event-selected', data);
       this.navCtrl.setRoot('MenuPage', { data: data });

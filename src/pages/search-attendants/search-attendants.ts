@@ -26,16 +26,16 @@ export class SearchAttendantsPage {
     this.getAttendes();
 
     this.events.subscribe('ionViewDidEnter-MenuPage', () => {
-      this.global.log(`In ionViewDidEnter-MenuPage`);
+      this.global.cLog(`In ionViewDidEnter-MenuPage`);
 
       this.db.get('users').then(res => {
-        this.global.log(`In db.get.users ${res}`);
+        this.global.cLog(`In db.get.users ${res}`);
         this.attendants = res;
       });
     });
 
     this.events.subscribe('basepat-changed', data => {
-      this.global.log(`In basepat-changed`, data);
+      this.global.cLog(`In basepat-changed`, data);
       this.getAttendes();
     });
 
@@ -57,12 +57,12 @@ export class SearchAttendantsPage {
           .subscribe(res => {
             this.global.hideLoader();
             this.noData = false;
-            this.global.log('getAttendes res', res);
+            this.global.cLog('getAttendes res', res);
             this.attendants = this.formatData(res);
             this.db.create('users', this.attendants);
           }, err => {
             this.global.hideLoader();
-            this.global.log('getAttendes error', err);
+            this.global.cLog('getAttendes error', err);
             this.noData = true;
           });
       } else {
@@ -81,24 +81,24 @@ export class SearchAttendantsPage {
       t.push(r);
       r = {};
     });
-    this.global.log('formatted value', t);
+    this.global.cLog('formatted value', t);
     return t;
   }
 
   search(foo) {
-    this.global.log('opening search', foo);
+    this.global.cLog('opening search', foo);
     this.isSearch = !this.isSearch;
   }
 
   onInput(ev) {
-    this.global.log('onInput($event) clicked', this.searchKey, ev);
+    this.global.cLog('onInput($event) clicked', this.searchKey, ev);
     if (this.searchKey.length > 2) {
-      this.global.log('in if', this.searchKey);
+      this.global.cLog('in if', this.searchKey);
       this.attendants = this.attendants.filter(val => { return val.name.toLowerCase().includes(this.searchKey.toLowerCase()) });
       this.noSearchResult = this.attendants.length == 0;
     } else {
       this.db.get('users').then(res => {
-        this.global.log(`In db.get.users ${res}`);
+        this.global.cLog(`In db.get.users ${res}`);
         this.attendants = res;
         this.noSearchResult = this.attendants.length == 0;
       });
@@ -106,7 +106,7 @@ export class SearchAttendantsPage {
   }
 
   openDetails(i: number) {
-    this.global.log('openDetails(i) ', i);
+    this.global.cLog('openDetails(i) ', i);
 
     this.navCtrl.push('AttendantDetailPage', { data: this.attendants[i] });
   }

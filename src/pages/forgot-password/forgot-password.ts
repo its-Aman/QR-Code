@@ -32,25 +32,25 @@ export class ForgotPasswordPage {
   }
 
   openMenu() {
-    this.global.log('Opening menu');
+    this.global.cLog('Opening menu');
   }
 
   reset() {
-    this.global.log('resetting password', this.forgetPasswordForm);
+    this.global.cLog('resetting password', this.forgetPasswordForm);
 
     if (this.forgetPasswordForm.valid) {
-      this.global.log('resetting password form is valid');
+      this.global.cLog('resetting password form is valid');
       let data = { email: this.forgetPasswordForm.controls['emailORusername'].value };
       this.global.showLoader();
       this.global.putRequest(`${this.global.base_path}api/v1/user/reset?email=${this.forgetPasswordForm.controls['emailORusername'].value}`, null)
         .subscribe(res => {
           this.global.hideLoader();
-          this.global.log('reset password response', res);
+          this.global.cLog('reset password response', res);
           setTimeout(() => {
             this.navCtrl.pop();
           }, 200);
         }, err => {
-          this.global.log('reset password error', err);
+          this.global.cLog('reset password error', err);
           this.global.hideLoader();
         });
 

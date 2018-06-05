@@ -26,21 +26,21 @@ export class MenuPage {
   }
 
   ionViewDidLoad() {
-    this.global.log('ionViewDidLoad MenuPage');
+    this.global.cLog('ionViewDidLoad MenuPage');
   }
 
   ionViewDidEnter() {
-    this.global.log('ionViewDidEnter MenuPage');
+    this.global.cLog('ionViewDidEnter MenuPage');
     this.events.publish('ionViewDidEnter-MenuPage');
   }
 
   getEventDetails() {
     this.db.get('event-selected').then(res => {
-      this.global.log(`getEventDetails's data `, res);
+      this.global.cLog(`getEventDetails's data `, res);
       this.venueDetails.eventName = res.venue_name;
       this.getAddress(res.latitude, res.longitude);
     }).catch(err => {
-      this.global.log(`getEventDetails's error `, err);
+      this.global.cLog(`getEventDetails's error `, err);
     });
   }
 
@@ -48,28 +48,28 @@ export class MenuPage {
     let url = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}`
     this.global.getRequest(url)
       .subscribe(res => {
-        this.global.log('address response', res);
+        this.global.cLog('address response', res);
         this.venueDetails.address = res.results[0].formatted_address;
       }, err => {
-        this.global.log('address error', err);
+        this.global.cLog('address error', err);
       });
   }
 
   scanQRCode() {
-    this.global.log('clicked scanQRCode');
+    this.global.cLog('clicked scanQRCode');
     this.navCtrl.push('ScanQrCodePage', { data: null });
   }
 
   syncToServer() {
-    this.global.log('clicked syncToServer');
+    this.global.cLog('clicked syncToServer');
     this.showAlert(`Server Message`, `Synchronization successfull`);
     // this.navCtrl.push('SearchAttendantsPage', {data: null});    
   }
 
   cleanEventData() {
-    this.global.log('clicked cleanEventData');
+    this.global.cLog('clicked cleanEventData');
     this.showAlert(`Warning`, `The information not sent will be lost. Are you sure?`, () => {
-      this.global.log('Clearing event log data');
+      this.global.cLog('Clearing event log data');
       this.db.remove('users').then(res => {
         this.db.remove('event-selected').then(res => {
           this.global.showMessage(`Data Cleared Successfully`);
@@ -81,17 +81,17 @@ export class MenuPage {
   }
 
   changeEvent() {
-    this.global.log('clicked changeEvent');
+    this.global.cLog('clicked changeEvent');
     this.app.getRootNav().setRoot('SelectActiveEventPage', { data: null });
   }
 
   settings() {
-    this.global.log('clicked settings');
+    this.global.cLog('clicked settings');
     this.navCtrl.push('SettingsPage', { data: null });
   }
 
   signout() {
-    this.global.log('clicked signout');
+    this.global.cLog('clicked signout');
     this.db.clear();
     this.app.getRootNav().setRoot('LoginPage');
   }
@@ -100,7 +100,7 @@ export class MenuPage {
     let buttons: AlertButton[] = [{
       text: 'OK',
       handler: () => {
-        this.global.log('OK pressed');
+        this.global.cLog('OK pressed');
 
         if (ok_callback) {
           ok_callback();

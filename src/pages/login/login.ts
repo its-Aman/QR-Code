@@ -37,35 +37,35 @@ export class LoginPage {
   }
 
   forgotPassword() {
-    this.global.log('forgot password');
+    this.global.cLog('forgot password');
 
     this.navCtrl.push('ForgotPasswordPage', { data: null });
   }
 
   openMenu() {
-    this.global.log('Opening menu');
+    this.global.cLog('Opening menu');
   }
 
   login() {
-    this.global.log('Logging in', this.loginForm);
+    this.global.cLog('Logging in', this.loginForm);
 
     if (this.loginForm.valid) {
 
-      this.global.log('form is valid');
+      this.global.cLog('form is valid');
 
       let _data = `client_id=${this.global.client_id}&client_secret=${this.global.client_secret}&grant_type=${this.global.grant_type}&username=${this.loginForm.controls['username'].value.replace('@', '%40')}&password=${this.loginForm.controls['password'].value}`;
 
-      this.global.log(`data to be posted is`, _data);
+      this.global.cLog(`data to be posted is`, _data);
 
       this.global.showLoader();
       this.global.postRequestUnauthorised(this.global.base_path + 'oauth2/authorize', _data)
         .subscribe(res => {
+          this.global.isTokenExpire = false;
           this.global.hideLoader();
-          this.global.log('api response', res);
+          this.global.cLog('api response', res);
           this.global.showMessage('Login successfull!!!');
-          this.global.user = res;
-          localStorage.setItem('user', JSON.stringify(res));
-          localStorage.setItem('token', res.access_token);
+          this.global.user_credentials = res;
+          localStorage.setItem('login-response', JSON.stringify(res));
           this.db.create('login-response', res).then(res => {
             setTimeout(() => {
               this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
@@ -73,7 +73,7 @@ export class LoginPage {
           });
         }, err => {
           this.global.hideLoader();
-          this.global.log('api response error', err);
+          this.global.cLog('api response error', err);
         });
 
     } else {

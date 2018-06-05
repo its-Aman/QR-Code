@@ -42,7 +42,7 @@ import { HttpModule } from '@angular/http';
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    // { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: NoopInterceptor, multi: true },
     StatusBar,
     SplashScreen,
     GlobalProvider,

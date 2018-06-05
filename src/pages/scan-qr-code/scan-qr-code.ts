@@ -28,42 +28,42 @@ export class ScanQrCodePage {
   }
 
   ionViewDidLoad() {
-    this.global.log('ionViewDidEnter ScanQrCodePage');
+    this.global.cLog('ionViewDidEnter ScanQrCodePage');
     // this.playSound();
   }
 
   ionViewDidEnter() {
-    this.global.log('ionViewDidLoad ScanQrCodePage', this.content.getNativeElement());
+    this.global.cLog('ionViewDidLoad ScanQrCodePage', this.content.getNativeElement());
     this.diagnostic.isCameraAuthorized().then(res => {
-      this.global.log(`Got the isCameraAuthorized res `, res);
+      this.global.cLog(`Got the isCameraAuthorized res `, res);
       if (res) {
         this.finalScan();
       } else {
         this.diagnostic.requestCameraAuthorization().then(res => {
-          this.global.log(`Got the requestCameraAuthorization res `, res);
+          this.global.cLog(`Got the requestCameraAuthorization res `, res);
           if (res) {
             this.finalScan();
           } else {
-            this.global.log(`App needs location to fetch data, please enable location and set location accuracy mode to high.`);
+            this.global.cLog(`App needs location to fetch data, please enable location and set location accuracy mode to high.`);
           }
         }).catch(err => {
-          this.global.log(`Got the requestCameraAuthorization error `, err);
+          this.global.cLog(`Got the requestCameraAuthorization error `, err);
         });
       }
     }).catch(err => {
-      this.global.log(`Got the isCameraAuthorized error`, err);
+      this.global.cLog(`Got the isCameraAuthorized error`, err);
     });
   }
 
   finalScan() {
     this.qrScanner.prepare().then((res: QRScannerStatus) => {
-      this.global.log('prepare status is ', res);
+      this.global.cLog('prepare status is ', res);
       this.scanQR_Code().then(res => {
-        this.global.log('scanQR_Code in ionViewDidLoad', res);
+        this.global.cLog('scanQR_Code in ionViewDidLoad', res);
         this.checkForUserPresentLocally(res);
       });
     }).catch(err => {
-      this.global.log("some error in prepare", err);
+      this.global.cLog("some error in prepare", err);
       if (err.code == 1) {
         this.global.showMessage(`The app needs the camera to scan QR codes`);
       }
@@ -72,7 +72,7 @@ export class ScanQrCodePage {
 
   checkForUserPresentLocally(id: string) {
     this.db.get('users').then((res: any[]) => {
-      this.global.log(`Got the users, now updating the time ${res}`);
+      this.global.cLog(`Got the users, now updating the time ${res}`);
 
       if (res.length > 0) {
         let user = res.find((user) => {
@@ -80,14 +80,14 @@ export class ScanQrCodePage {
         });
 
         if (user) {
-          this.global.log(`User found ${user}, now updating checked_in_time`);
+          this.global.cLog(`User found ${user}, now updating checked_in_time`);
           res[res.indexOf(user)].checked_in_at = (new Date()).toISOString();
           this.db.create('users', res)
             .then(update => {
-              this.global.log(`Users updated successfully ${update}`);
+              this.global.cLog(`Users updated successfully ${update}`);
               this.navCtrl.push('AttendantDetailPage', { data: user });
             }).catch(err => {
-              this.global.log(`Users updated error ${err}`);
+              this.global.cLog(`Users updated error ${err}`);
               this.navCtrl.push('AttendantDetailPage', { data: null });
             });
         } else {
@@ -99,12 +99,12 @@ export class ScanQrCodePage {
 
   async scanQR_Code(): Promise<string> {
     try {
-      this.global.log('in scanPatient try');
+      this.global.cLog('in scanPatient try');
       this.scanResult = await this._startScanner();
-      this.global.log('scanResult is ', this.scanResult);
+      this.global.cLog('scanResult is ', this.scanResult);
     }
     catch (err) {
-      this.global.log('in scanPatient catch', err);
+      this.global.cLog('in scanPatient catch', err);
       throw err;
     }
 
@@ -112,11 +112,11 @@ export class ScanQrCodePage {
   }
 
   private _startScanner(): Promise<any> {
-    this.global.log('in _startScanner');
+    this.global.cLog('in _startScanner');
     // Optionally request the permission early
     return this.qrScanner.prepare()
       .then((status: QRScannerStatus) => {
-        this.global.log('in _startScanner prepare', status);
+        this.global.cLog('in _startScanner prepare', status);
 
         let nowTimeHours = new Date().getHours();
         if (nowTimeHours > 18 && nowTimeHours < 5) {
@@ -137,7 +137,7 @@ export class ScanQrCodePage {
             const _content = this.content.getNativeElement();
             // start scanning
             let scanSub = this.qrScanner.scan().subscribe((text: string) => {
-              this.global.log('in _startScanner prepare->promise->scan', status);
+              this.global.cLog('in _startScanner prepare->promise->scan', status);
               //play sound
               this.playSound();
 
@@ -171,36 +171,36 @@ export class ScanQrCodePage {
 
   playSound() {
     let selectedSound = JSON.parse(localStorage.getItem('sound'));
-    this.global.log(`in play sound and the selected sound is`, selectedSound)
+    this.global.cLog(`in play sound and the selected sound is`, selectedSound)
     if (!selectedSound) {
       this.global.showMessage(`Please select a sound in settings`);
       return;
     } else {
       this.nativeAudio.preloadSimple(selectedSound, `assets/sounds/${selectedSound}`)
         .then((res) => {
-          this.global.log(`in success callback of preload sample, `, res);
+          this.global.cLog(`in success callback of preload sample, `, res);
           this.nativeAudio.play(selectedSound)
             .then((res) => {
-              this.global.log(`in success callback of play, `, res);
+              this.global.cLog(`in success callback of play, `, res);
               setTimeout(() => {
                 this.nativeAudio.stop(selectedSound)
                   .then(res => {
-                    this.global.log(`in success callback of stop, `, res);
+                    this.global.cLog(`in success callback of stop, `, res);
                   }).catch(err => {
-                    this.global.log(`in err callback of stop, `, err);
+                    this.global.cLog(`in err callback of stop, `, err);
                   });
                 this.nativeAudio.unload(selectedSound)
                   .then(res => {
-                    this.global.log(`in success callback of unload, `, res);
+                    this.global.cLog(`in success callback of unload, `, res);
                   }).catch(err => {
-                    this.global.log(`in err callback of unload, `, err);
+                    this.global.cLog(`in err callback of unload, `, err);
                   });
               }, 5000);
             }).catch((err) => {
-              this.global.log(`in err callback of play, `, err);
+              this.global.cLog(`in err callback of play, `, err);
             });
         }).catch((err) => {
-          this.global.log(`in err callback of preload sample, `, err);
+          this.global.cLog(`in err callback of preload sample, `, err);
         });
     }
   }

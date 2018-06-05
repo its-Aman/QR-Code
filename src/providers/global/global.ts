@@ -1,3 +1,4 @@
+import { DatabaseProvider } from './../database/database';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController, Loading, Events } from 'ionic-angular';
@@ -9,6 +10,7 @@ import { catchError, retry } from 'rxjs/operators';
 @Injectable()
 export class GlobalProvider {
 
+  isTokenExpire: boolean = false;
   private loader: Loading;
   public base_path: string;
 
@@ -25,13 +27,14 @@ export class GlobalProvider {
   public grant_type: string = 'password';
   public noNetwork: boolean = false;
 
-  public user = JSON.parse(localStorage.getItem('user'));
+  public user_credentials = JSON.parse(localStorage.getItem('login-response'));
 
   constructor(
     private http: HttpClient,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
     private events: Events,
+    private db: DatabaseProvider,
   ) {
     console.log('Hello GlobalProvider Provider');
 
@@ -57,8 +60,14 @@ export class GlobalProvider {
       this.noNetwork = error.status == 0;
 
       if (error.status == 500) {
+        console.log('server error');
+      } else if (error.status == 401) {
         console.log('token expired, need to login again');
         this.events.publish('token-expire');
+        this.isTokenExpire = true;
+        this.getToken();
+      } else {
+        this.isTokenExpire = false;
       }
     }
     // return an ErrorObservable with a user-facing error message
@@ -66,38 +75,40 @@ export class GlobalProvider {
   };
 
   getRequest(url: string) {
-    this.log(`in getRequest and the user is`, this.user);
+    this.cLog(`in getRequest and the user is`, this.user_credentials);
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': "Bearer " + this.user ? this.user.access_token : 'my-access-token',
+        'Authorization': "Bearer " + this.getToken(),
+        'Content-Type': 'application/x-www-form-urlencoded'
       })
     };
 
     return this.http.get<any>(url, httpOptions)
       .pipe(
-        // retry(1),
+        retry(1),
         catchError(this.handleError),
     );
   }
 
   postRequest(url: string, data: any) {
-    this.log(`in postRequest and the this.user is`, this.user);
+    this.cLog(`in postRequest and the this.user is`, this.user_credentials);
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': "Bearer " + this.user ? this.user.access_token : 'my-access-token',
+        'Authorization': "Bearer " + this.getToken(),
+        'Content-Type': 'application/x-www-form-urlencoded'
       })
     };
 
     return this.http.post<any>(url, data, httpOptions)
       .pipe(
-        // retry(1),
+        retry(1),
         catchError(this.handleError),
     );
   }
 
   postRequestUnauthorised(url: string, data: any) {
 
-    this.log(`in postRequestUnauthorize and the data is`, data);
+    this.cLog(`in postRequestUnauthorize and the data is`, data);
 
     return this.http.post<any>(url, data, {
       headers: new HttpHeaders({
@@ -105,22 +116,23 @@ export class GlobalProvider {
       })
     })
       .pipe(
-        // retry(1),
+        retry(1),
         catchError(this.handleError),
     );
   }
 
   putRequest(url: string, data: any) {
-    this.log(`in putRequest and the this.user is`, this.user);
+    this.cLog(`in putRequest and the this.user is`, this.user_credentials);
     const httpOptions = {
       headers: new HttpHeaders({
-        'Authorization': "Bearer " + this.user ? this.user.access_token : 'my-access-token',
+        'Authorization': "Bearer " + this.getToken(),
+        'Content-Type': 'application/x-www-form-urlencoded'
       })
     };
 
     return this.http.put<any>(url, data, httpOptions)
       .pipe(
-        // retry(1),
+        retry(1),
         catchError(this.handleError),
     );
   }
@@ -157,9 +169,32 @@ export class GlobalProvider {
     catch (e) { }
   }
 
-  log(message?: any, ...optionalParams: any[]): void {
+  cLog(message?: any, ...optionalParams: any[]): void {
     console.log(message, ...optionalParams);
 
     // alert(JSON.stringify(message) + JSON.stringify(optionalParams));
+  }
+
+  getToken() {
+    this.cLog(`in get token`, this.user_credentials.access_token);
+
+    if (this.isTokenExpire) {
+      this.cLog(`token is expired getting refresh token`);
+      this.http.post(this.base_path + 'oauth2/refresh', `client_id=${this.client_id}&client_secret=${this.client_secret}&grant_type=refresh_token&refresh_token=${this.user_credentials.refresh_token}`, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } })
+        .subscribe(
+          res => {
+            localStorage.setItem('login-response', JSON.stringify(res));
+            this.user_credentials = res;
+            this.db.create('login-response', res).then(res => {
+              this.cLog(`saved the refresh token refresh token`);
+            });
+            return res["access_token"];
+          }, err => {
+            this.cLog(`some error in getting refresh token`);
+          });
+    } else {
+      this.cLog(`sending token`);
+      return this.user_credentials.access_token;
+    }
   }
 }

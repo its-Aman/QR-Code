@@ -23,13 +23,13 @@ export class MyApp {
   ) {
 
     this.initializeApp();
-    this.listenForTokenExpire();
+    // this.listenForTokenExpire();
 
     let sound = JSON.parse(localStorage.getItem('sound'));
     let basePath = JSON.parse(localStorage.getItem('basepath'));
 
-    this.global.log(`preloaded sound is `, sound);
-    this.global.log(`preloaded basepath is `, basePath);
+    this.global.cLog(`preloaded sound is `, sound);
+    this.global.cLog(`preloaded basepath is `, basePath);
 
     if (!sound) {
       localStorage.setItem('sound', JSON.stringify('cycle.mp3'));

@@ -25,11 +25,11 @@ export class SettingsPage {
   }
 
   changePassword() {
-    this.global.log('in changePassword()');
+    this.global.cLog('in changePassword()');
   }
 
   changeLanguage() {
-    this.global.log('in changeLanguage()');
+    this.global.cLog('in changeLanguage()');
 
     let alert = this.alrtCtrl.create();
     alert.setTitle('Choose Language');
@@ -51,7 +51,7 @@ export class SettingsPage {
     alert.addButton({
       text: "Done",
       handler: (val) => {
-        this.global.log('HAndler value is', val);
+        this.global.cLog('HAndler value is', val);
         this.db.create('language', val);
       }
     });
@@ -60,7 +60,7 @@ export class SettingsPage {
   }
 
   soundAndNotification() {
-    this.global.log('in soundAndNotification');
+    this.global.cLog('in soundAndNotification');
     let selectedSound = JSON.parse(localStorage.getItem('sound'));
 
     let alert = this.alrtCtrl.create({
@@ -114,7 +114,7 @@ export class SettingsPage {
   }
 
   changeSound(val: any) {
-    this.global.log(`in changeSound and the selected value is`, val);
+    this.global.cLog(`in changeSound and the selected value is`, val);
     localStorage.setItem('sound', JSON.stringify(val));
   }
 
@@ -134,7 +134,7 @@ export class SettingsPage {
         {
           text: 'Change',
           handler: (val) => {
-            this.global.log(`in change basepath and the new basepath is `, val, val["0"]);
+            this.global.cLog(`in change basepath and the new basepath is `, val, val["0"]);
             localStorage.setItem('basepath', JSON.stringify(val));
             this.events.publish('basepat-changed', val["0"]);
             this.global.base_path = val["0"];
