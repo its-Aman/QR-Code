@@ -13,6 +13,6 @@ export class NoopInterceptor implements HttpInterceptor {
         });
 
         console.log('NoopInterceptor', newReq);
-        return next.handle(newReq);
+        return next.handle(req);
     }
 }
