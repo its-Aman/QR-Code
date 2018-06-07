@@ -53,12 +53,17 @@ export class SearchAttendantsPage {
     this.db.get('event-selected').then(data => {
       if (data) {
         this.global.showLoader();
-        this.global.getRequest(`${this.global.base_path}api/v1/attendee?instance_id=${data.instance_id}&limit=200`)
+        this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}&limit=200`)
           .subscribe(res => {
             this.global.hideLoader();
             this.noData = false;
-            this.global.cLog('getAttendes res', res);
+            this.global.cLog('  ', res);
             this.attendants = this.formatData(res);
+            this.attendants.forEach((_users, i) => {
+              this.global.cLog('asdf', _users, i);
+              this.attendants[i].checked = false;
+            });
+
             this.db.create('users', this.attendants);
           }, err => {
             this.global.hideLoader();
@@ -92,7 +97,7 @@ export class SearchAttendantsPage {
 
   onInput(ev) {
     this.global.cLog('onInput($event) clicked', this.searchKey, ev);
-    if (this.searchKey.length > 2) {
+    if (this.searchKey && this.searchKey.length > 2) {
       this.global.cLog('in if', this.searchKey);
       this.attendants = this.attendants.filter(val => { return val.name.toLowerCase().includes(this.searchKey.toLowerCase()) });
       this.noSearchResult = this.attendants.length == 0;
@@ -100,7 +105,7 @@ export class SearchAttendantsPage {
       this.db.get('users').then(res => {
         this.global.cLog(`In db.get.users ${res}`);
         this.attendants = res;
-        this.noSearchResult = this.attendants.length == 0;
+        this.noSearchResult = this.attendants ? this.attendants.length == 0 : false;
       });
     }
   }

@@ -87,7 +87,7 @@
     <allow-navigation href="*" />
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.5" />
     <plugin name="cordova-plugin-nativeaudio" spec="^3.0.9" />
-    <engine name="android" spec="7.0.0" />
     <allow-navigation href="http://172.28.49.209:8100" />
     <allow-navigation href="http://192.168.43.43:8100" />
+    <engine name="android" spec="7.0.0" />
 </widget>

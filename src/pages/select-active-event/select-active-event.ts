@@ -40,7 +40,7 @@ export class SelectActiveEventPage {
   getEventList() {
     this.global.showLoader();
     this.global.getRequest(this.global.base_path + `api/v1/events?active=true&latitude=&longitude=&radio=&tickets=true&search=`)
-      .subscribe(res => {
+      .subscribe((res: any) => {
         this.global.hideLoader();
         this.global.isTokenExpire = false;
         this.global.cLog('getList data', res);

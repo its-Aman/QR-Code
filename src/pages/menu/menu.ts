@@ -38,14 +38,17 @@ export class MenuPage {
     this.db.get('event-selected').then(res => {
       this.global.cLog(`getEventDetails's data `, res);
       this.venueDetails.eventName = res.venue_name;
-      this.getAddress(res.latitude, res.longitude);
+      if (res.latitude && res.longitude) {
+        this.getAddress(res.latitude, res.longitude);
+      }
+
     }).catch(err => {
       this.global.cLog(`getEventDetails's error `, err);
     });
   }
 
   getAddress(lat, long) {
-    let url = `http://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}`
+    let url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${long}&key=AIzaSyCnQnyEfpKqea6KVev1LqFq8iZ6jUTaw6M`
     this.global.getRequest(url)
       .subscribe(res => {
         this.global.cLog('address response', res);
@@ -62,7 +65,8 @@ export class MenuPage {
 
   syncToServer() {
     this.global.cLog('clicked syncToServer');
-    this.showAlert(`Server Message`, `Synchronization successfull`);
+    this.bulkUpdate();
+    // this.showAlert(`Server Message`, `Synchronization successfull`);
     // this.navCtrl.push('SearchAttendantsPage', {data: null});    
   }
 
@@ -124,6 +128,36 @@ export class MenuPage {
       enableBackdropDismiss: true,
     });
     alert.present();
+  }
+
+  bulkUpdate() {
+    this.db.get('users').then(_users => {
+
+      this.global.cLog(`users from db are`, _users);
+
+      let data = _users;
+      if (data) {
+        this.global.putRequest(this.global.base_path + 'api/v1/attendees', data)
+          .subscribe(
+            res => {
+
+              this.global.cLog(`in bulkUpdate and the response is `, res);
+              _users.forEach((element, i) => {
+                _users[i].checked = true;
+              });
+
+              this.db.create('users', _users).then(res => {
+                this.showAlert(`Server Message`, `Synchronization successfull`);
+              });
+
+            }, err => {
+              this.global.cLog(`some error in bulkUpdate `, err);
+            }
+          )
+      } else {
+        this.showAlert(`Alert`, `No User to sync`);
+      }
+    });
   }
 
 }

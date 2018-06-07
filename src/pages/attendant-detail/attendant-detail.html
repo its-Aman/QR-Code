@@ -34,7 +34,7 @@
     <ion-row text-center *ngIf="isValid">
       <ion-col col-12 *ngIf="attendant?.name" class="name"> {{attendant?.name}} </ion-col>
       <ion-col col-12 *ngIf="event?.id" class="id">ID: {{event?.id}} </ion-col>
-      <ion-col col-12 *ngIf="event?.description" class="profession"> {{event?.description}} </ion-col>
+      <ion-col col-12 *ngIf="event?.description" class="profession" [innerHTML]="event?.description"></ion-col>
       <ion-col col-12 *ngIf="attendant?.ticket_type_id" class="ticket-details">Ticket: {{attendant?.ticket_type_id}}</ion-col>
       <ion-col col-12 *ngIf="attendant?.checked_in_at" class="ticket-time"> {{attendant?.checked_in_at | date:'shortTime'}}</ion-col>
     </ion-row>

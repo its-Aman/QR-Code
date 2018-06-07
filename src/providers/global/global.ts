@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { catchError, retry } from 'rxjs/operators';
 
+declare var $: any;
 @Injectable()
 export class GlobalProvider {
 
@@ -36,7 +37,7 @@ export class GlobalProvider {
     private events: Events,
     private db: DatabaseProvider,
   ) {
-    console.log('Hello GlobalProvider Provider');
+    console.log('Hello GlobalProvider Provider', $);
 
     //testing server
     // this.base_path = 'http://private-amnesiac-bf0d54-eventonline.apiary-proxy.com/';
@@ -75,20 +76,107 @@ export class GlobalProvider {
   };
 
   getRequest(url: string) {
-    this.cLog(`in getRequest and the user is`, this.user_credentials);
-    const httpOptions = {
-      headers: new HttpHeaders({
-        'Authorization': "Bearer " + this.getToken(),
-        'Content-Type': 'application/x-www-form-urlencoded'
-      })
-    };
+    let headers = new HttpHeaders()
+      .set('Authorization', "Bearer " + this.getToken())
+      .set('Content-Type', 'application/json');
+    // {
+    //   'Authorization': "Bearer c38cd018f9487da66fee336d18ed3a1f",
+    //     // 'Authorization': "Bearer " + this.getToken(),
+    //     'Content-Type': 'application/x-www-form-urlencoded'
+    // });
 
-    return this.http.get<any>(url, httpOptions)
+    this.cLog(`in getRequest and the user is`, this.user_credentials, headers);
+
+    return this.http.get<any>(url, { headers: headers })
       .pipe(
         retry(1),
         catchError(this.handleError),
     );
   }
+
+  _getRequest(url: string) {
+    // Return a new promise.
+    return Observable.fromPromise(
+      new Promise((resolve, reject) => {
+        // Do the usual XHR stuff
+        var req = new XMLHttpRequest();
+        req.open('GET', url);
+
+        req.setRequestHeader('Authorization', "Bearer " + this.getToken());
+        req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+        req.onload = () => {
+          // This is called even on 404 etc
+          // so check the status
+          if (req.status == 200) {
+            // Resolve the promise with the response text
+            resolve(req.response);
+          }
+          else {
+            // Otherwise reject with the status text
+            // which will hopefully be a meaningful error
+            reject(Error(req.statusText));
+          }
+        };
+
+        // Handle network errors
+        req.onerror = function () {
+          reject(Error("Network Error"));
+        };
+
+        // Make the request
+        req.send();
+      })
+    );
+  }
+
+  __getRequest(url: string) {
+    return Observable.create(observer => {
+      var req = new XMLHttpRequest();
+      req.open('GET', url);
+
+      req.setRequestHeader('Authorization', "Bearer " + this.getToken());
+      req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+      req.onload = () => {
+        // This is called even on 404 etc
+        // so check the status
+        if (req.status == 200) {
+          // Resolve the promise with the response text
+          this.cLog(`status 200 ok.`, req);
+          observer.next(req.response);
+          observer.complete();
+        } else {
+          // Otherwise reject with the status text
+          // which will hopefully be a meaningful error
+          this.cLog(`status error ok.`, req);
+          observer.error(req.statusText);
+        }
+      };
+
+      // Handle network errors
+      req.onerror = () => {
+        this.cLog(`Network Error.`, req);
+        observer.error("Network Error");
+      };
+
+      // Make the request
+      req.send();
+
+    });
+  }
+
+  ___getRequest(url: string) {
+    $.ajax({
+      url: url,
+      // data: { signature: authHeader },
+      type: "GET",
+      beforeSend: (xhr) => { xhr.setRequestHeader('Authorization', "Bearer " + this.getToken()); },
+      success: (result, status, xhr) => { this.cLog('Success!', result, status, xhr); },
+      error: (xhr, status, error) => { this.cLog('Some Error!', error, status, xhr); },
+    });
+  }
+
 
   postRequest(url: string, data: any) {
     this.cLog(`in postRequest and the this.user is`, this.user_credentials);

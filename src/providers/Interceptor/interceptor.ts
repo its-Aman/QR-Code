@@ -9,7 +9,7 @@ export class NoopInterceptor implements HttpInterceptor {
     intercept(req: HttpRequest<any>, next: HttpHandler):
         Observable<HttpEvent<any>> {
         let newReq = req.clone({
-            headers: req.headers.set('Authorization', "Bearer 52ddd8544e32011dc757c5e4550c318a")
+            headers: req.headers.set('Authorization', "Bearer c38cd018f9487da66fee336d18ed3a1f")
         });
 
         console.log('NoopInterceptor', newReq);

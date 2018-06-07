@@ -10,6 +10,10 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 })
 export class MyApp {
 
+  interval: number;
+  currentTime: number;
+  exptoken: any;
+  isVerified: boolean;
   @ViewChild(Nav) nav: Nav;
   rootPage;
 
@@ -21,6 +25,8 @@ export class MyApp {
     private events: Events,
     private global: GlobalProvider
   ) {
+
+    this.refreshTokenLogic();
 
     this.initializeApp();
     // this.listenForTokenExpire();
@@ -80,4 +86,49 @@ export class MyApp {
       this.splashScreen.hide();
     });
   }
+
+  refreshTokenLogic() {
+    this.interval = setInterval(() => {
+      this.alertFunc();
+    }, 1000);
+  }
+
+  alertFunc() {
+    // console.log("aaaaaa")
+    let token = JSON.parse(localStorage.getItem("login-response"));
+    let data = `client_id=${this.global.client_id}&client_secret=${this.global.client_secret}&grant_type=refresh_token&refresh_token=${token.refresh_token}`;
+
+    if (token.access_token != null) {
+      if (this.global.isTokenExpire && this.isVerified == false) {
+        console.log("yes............");
+        this.isVerified = true;
+
+        this.global.postRequest(this.global.base_path + 'oauth2/refresh', data).subscribe((res) => {
+          console.log("yes----------", res);
+          this.isVerified = false
+          localStorage.setItem("login-response", res);
+        });
+      }
+      this.exptoken = token.expires_in;
+      this.currentTime = Math.floor((Date.now()) / 1000);
+
+      this.global.cLog("expire token", this.exptoken);
+
+      if (this.currentTime == this.exptoken - 20) {
+        console.log("token is expired");
+
+        this.global.postRequest(this.global.base_path + 'oauth2/refresh', data).subscribe((res) => {
+          console.log("yes----------", res);
+          localStorage.setItem("login-response", res);
+        });
+      }
+      else {
+        // console.log("token is not expired ")
+      }
+    }
+    else {
+      // console.log("token not found")
+    }
+  }
+
 }
