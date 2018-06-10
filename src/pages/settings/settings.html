@@ -32,9 +32,18 @@
             </ion-item>
 
             <ion-item (click)="changeBasePath()">
-              <ion-icon class="icons" ios="md-notifications" md="md-notifications" item-start></ion-icon>
+              <ion-icon class="icons" ios="md-code" md="md-code" item-start></ion-icon>
               Change Base Path
             </ion-item>
+
+            <ion-item>
+              <ion-icon *ngIf="muteSound" class="icons" ios="md-volume-off" md="md-volume-off" item-start></ion-icon>
+              <ion-icon *ngIf="!muteSound" class="icons" ios="md-volume-up" md="md-volume-up" item-start></ion-icon>
+
+              <ion-label>Mute Sound</ion-label>
+              <ion-checkbox (ionChange)="mute($event)" [(ngModel)]="muteSound" item-end></ion-checkbox>
+            </ion-item>
+
           </ion-list>
         </div>
       </ion-col>

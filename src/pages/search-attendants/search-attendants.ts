@@ -29,7 +29,7 @@ export class SearchAttendantsPage {
       this.global.cLog(`In ionViewDidEnter-MenuPage`);
 
       this.db.get('users').then(res => {
-        this.global.cLog(`In db.get.users ${res}`);
+        this.global.cLog(`In db.get.users`, res);
         this.attendants = res;
       });
     });
@@ -55,6 +55,9 @@ export class SearchAttendantsPage {
         this.global.showLoader();
         this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}&limit=200`)
           .subscribe(res => {
+
+            this.global.isTokenExpire = false;
+
             this.global.hideLoader();
             this.noData = false;
             this.global.cLog('  ', res);
@@ -67,8 +70,9 @@ export class SearchAttendantsPage {
             this.db.create('users', this.attendants);
           }, err => {
             this.global.hideLoader();
-            this.global.cLog('getAttendes error', err);
             this.noData = true;
+            this.global.showMessage(err.error);
+            this.global.cLog('getAttendes error', err);
           });
       } else {
         this.noData = true;
@@ -111,8 +115,13 @@ export class SearchAttendantsPage {
   }
 
   openDetails(i: number) {
-    this.global.cLog('openDetails(i) ', i);
-
+    this.global.cLog('openDetails(i) ', this.attendants[i]);
     this.navCtrl.push('AttendantDetailPage', { data: this.attendants[i] });
+  }
+
+  checkAttendee(i): boolean {
+    let _return = Boolean((new Date(this.attendants[i].checked_in_at)).getFullYear());
+    // this.global.cLog(`in checkAttendee returning, `, _return);
+    return _return;
   }
 }

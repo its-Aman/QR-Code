@@ -22,8 +22,8 @@
   <ion-list no-lines *ngIf="!noData || !noSearchResult">
     <ion-item *ngFor="let attendant of attendants; let i=index;" (click)="openDetails(i)">
       <p class="name">{{attendant?.name}}</p>
-      <p *ngIf="attendant?.checked" [class.red]="attendant?.checked" class="time">{{attendant?.checked | date:'shortTime'}}</p>
-      <p *ngIf="!attendant?.checked" [class.red]="attendant?.checked" class="time">&lt;not checked&gt;</p>
+      <p *ngIf="checkAttendee(i)" [class.red]="attendant?.checked" class="time">{{attendant?.checked_in_at | date:'shortTime'}}</p>
+      <p *ngIf="!checkAttendee(i)" [class.red]="attendant?.checked" class="time">&lt;not checked&gt;</p>
     </ion-item>
   </ion-list>
 

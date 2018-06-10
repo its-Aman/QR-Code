@@ -1,7 +1,7 @@
 import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Content } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Content, Platform } from 'ionic-angular';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { NativeAudio } from '@ionic-native/native-audio';
@@ -24,35 +24,42 @@ export class ScanQrCodePage {
     private db: DatabaseProvider,
     private diagnostic: Diagnostic,
     private nativeAudio: NativeAudio,
+    private plt: Platform,
   ) {
   }
 
   ionViewDidLoad() {
-    this.global.cLog('ionViewDidEnter ScanQrCodePage');
+    this.global.cLog('ionViewDidEnter ScanQrCodePage', this.plt._platforms);
     // this.playSound();
   }
 
   ionViewDidEnter() {
     this.global.cLog('ionViewDidLoad ScanQrCodePage', this.content.getNativeElement());
-    this.diagnostic.isCameraAuthorized().then(res => {
-      this.global.cLog(`Got the isCameraAuthorized res `, res);
-      if (res) {
-        this.finalScan();
-      } else {
-        this.diagnostic.requestCameraAuthorization().then(res => {
-          this.global.cLog(`Got the requestCameraAuthorization res `, res);
-          if (res) {
-            this.finalScan();
-          } else {
-            this.global.cLog(`App needs location to fetch data, please enable location and set location accuracy mode to high.`);
-          }
-        }).catch(err => {
-          this.global.cLog(`Got the requestCameraAuthorization error `, err);
-        });
-      }
-    }).catch(err => {
-      this.global.cLog(`Got the isCameraAuthorized error`, err);
-    });
+
+    if (this.plt.is('android')) {
+
+      this.diagnostic.isCameraAuthorized().then(res => {
+        this.global.cLog(`Got the isCameraAuthorized res `, res);
+        if (res) {
+          this.finalScan();
+        } else {
+          this.diagnostic.requestCameraAuthorization().then(res => {
+            this.global.cLog(`Got the requestCameraAuthorization res `, res);
+            if (res) {
+              this.finalScan();
+            } else {
+              this.global.cLog(`App needs location to fetch data, please enable location and set location accuracy mode to high.`);
+            }
+          }).catch(err => {
+            this.global.cLog(`Got the requestCameraAuthorization error `, err);
+          });
+        }
+      }).catch(err => {
+        this.global.cLog(`Got the isCameraAuthorized error`, err);
+      });
+    } else {
+      this.finalScan();
+    }
   }
 
   finalScan() {
@@ -72,7 +79,7 @@ export class ScanQrCodePage {
 
   checkForUserPresentLocally(id: string) {
     this.db.get('users').then((res: any[]) => {
-      this.global.cLog(`Got the users, now updating the time ${res}`);
+      this.global.cLog(`Got the users, now updating the time`, res);
 
       if (res.length > 0) {
         let user = res.find((user) => {
@@ -80,15 +87,15 @@ export class ScanQrCodePage {
         });
 
         if (user) {
-          this.global.cLog(`User found ${user}, now updating checked_in_time`);
+          this.global.cLog(`User found `, user, ` now updating checked_in_time`);
           res[res.indexOf(user)].checked_in_at = (new Date()).toISOString();
           res[res.indexOf(user)].checked = false;
           this.db.create('users', res)
             .then(update => {
-              this.global.cLog(`Users updated successfully ${update}`);
+              this.global.cLog(`Users updated successfully`, update);
               this.navCtrl.push('AttendantDetailPage', { data: user });
             }).catch(err => {
-              this.global.cLog(`Users updated error ${err}`);
+              this.global.cLog(`Users updated error`, err);
               this.navCtrl.push('AttendantDetailPage', { data: null });
             });
         } else {
@@ -140,7 +147,7 @@ export class ScanQrCodePage {
             let scanSub = this.qrScanner.scan().subscribe((text: string) => {
               this.global.cLog('in _startScanner prepare->promise->scan', status);
               //play sound
-              this.playSound();
+              JSON.parse(localStorage.getItem('mute-sound')) ? null : this.playSound();
 
               this.qrScanner.hide(); // hide camera preview
               scanSub.unsubscribe(); // stop scanning

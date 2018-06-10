@@ -55,6 +55,7 @@ export class LoginPage {
 
       let _data = `client_id=${this.global.client_id}&client_secret=${this.global.client_secret}&grant_type=${this.global.grant_type}&username=${this.loginForm.controls['username'].value.replace('@', '%40')}&password=${this.loginForm.controls['password'].value}`;
 
+      // _data = `client_id=E3FDE09D-030C-4E78-B548-9888BF44&client_secret=my-secret&grant_type=password&username=smelgin%40gmail.com&password=andrescock`
       this.global.cLog(`data to be posted is`, _data);
 
       this.global.showLoader();
@@ -74,6 +75,7 @@ export class LoginPage {
         }, err => {
           this.global.hideLoader();
           this.global.cLog('api response error', err);
+          this.global.showMessage(err.error);
         });
 
     } else {

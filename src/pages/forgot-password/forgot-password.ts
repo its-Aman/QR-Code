@@ -39,11 +39,12 @@ export class ForgotPasswordPage {
     this.global.cLog('resetting password', this.forgetPasswordForm);
 
     if (this.forgetPasswordForm.valid) {
-      this.global.cLog('resetting password form is valid');
-      let data = { email: this.forgetPasswordForm.controls['emailORusername'].value };
+      let queryParams = `email=${this.forgetPasswordForm.controls['emailORusername'].value}&client_id=${this.global.client_id}&client_secret=${this.global.client_secret}`;
+      this.global.cLog('resetting password form is valid', queryParams);
       this.global.showLoader();
-      this.global.putRequest(`${this.global.base_path}api/v1/user/reset?email=${this.forgetPasswordForm.controls['emailORusername'].value}`, null)
+      this.global.putRequest(`${this.global.base_path}api/v1/user/reset?${queryParams}`, null)
         .subscribe(res => {
+          this.global.isTokenExpire = false;
           this.global.hideLoader();
           this.global.cLog('reset password response', res);
           setTimeout(() => {
@@ -52,6 +53,7 @@ export class ForgotPasswordPage {
         }, err => {
           this.global.cLog('reset password error', err);
           this.global.hideLoader();
+          this.global.showMessage(err.error);
         });
 
     } else {

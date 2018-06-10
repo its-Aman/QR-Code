@@ -96,7 +96,11 @@ export class MenuPage {
 
   signout() {
     this.global.cLog('clicked signout');
-    this.db.clear();
+
+    localStorage.removeItem('login-response');
+    this.db.remove('login-response').then(res => { this.global.cLog(`successfully removed`) });
+    this.global.user_credentials = null;
+    
     this.app.getRootNav().setRoot('LoginPage');
   }
 
@@ -135,11 +139,13 @@ export class MenuPage {
 
       this.global.cLog(`users from db are`, _users);
 
-      let data = _users;
+      let data = _users.filter(_u => _u.checked);
       if (data) {
         this.global.putRequest(this.global.base_path + 'api/v1/attendees', data)
           .subscribe(
             res => {
+
+              this.global.isTokenExpire = false;
 
               this.global.cLog(`in bulkUpdate and the response is `, res);
               _users.forEach((element, i) => {
@@ -152,6 +158,9 @@ export class MenuPage {
 
             }, err => {
               this.global.cLog(`some error in bulkUpdate `, err);
+              this.showAlert(`Error`, `There has been errors trying to sync. Check with your administrator`);
+              this.global.showMessage(err.error);
+              this.events.publish('basepat-changed', { key: "From menu bulk update", value: true });
             }
           )
       } else {

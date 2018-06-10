@@ -1,36 +1,42 @@
 page-settings {
-    .list-header-md{
-        border-top: none;
+  .list-header-md {
+    border-top: none;
+  }
+  .list-header-ios {
+    border-top: none;
+    border-bottom: none;
+  }
+  .icons {
+    color: #b2b2b2;
+  }
+  .header {
+    margin-bottom: 15px;
+    .label-md {
+      font-size: 16px;
     }
-    .list-header-ios{
-        border-top: none;
-        border-bottom: none;
+    .label-ios {
+      font-size: 14px;
     }
-    .icons{
-        color: #b2b2b2;
-    }
-    .header{
-        margin-bottom: 15px;
-        .label-md{
-            font-size: 16px;
-        }
-        .label-ios{
-            font-size: 14px;
-        }
-    }
-    .label-md{
-        font-size: 18px;
-    }
-    .label-ios{
-        font-size: 18px;
-    }
-    .list-ios > .item-block:last-child, .list-ios > .item-wrapper:last-child .item-block{
-        border-bottom: none;
-    }
-    .list-ios .item-block .item-inner{
-        border-bottom: none;
-    }
-    .item-ios [item-left], .item-ios [item-start]{
-        margin: 8px 26px 8px 0;
-    }
+  }
+  .label-md {
+    font-size: 18px;
+  }
+  .label-ios {
+    font-size: 18px;
+  }
+  .list-ios>.item-block:last-child,
+  .list-ios>.item-wrapper:last-child .item-block {
+    border-bottom: none;
+  }
+  .list-ios .item-block .item-inner {
+    border-bottom: none;
+  }
+  .item-ios [item-left],
+  .item-ios [item-start] {
+    margin: 8px 26px 8px 0;
+  }
+  .item.item-md .checkbox-md[item-right],
+  .item.item-md .checkbox-md[item-end] {
+    margin: 0;
+  }
 }

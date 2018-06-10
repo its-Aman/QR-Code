@@ -10,6 +10,8 @@ import { IonicPage, NavController, NavParams, AlertController, Events } from 'io
 })
 export class SettingsPage {
 
+  muteSound: boolean = false;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -18,6 +20,7 @@ export class SettingsPage {
     private alrtCtrl: AlertController,
     private events: Events,
   ) {
+    this.muteSound = JSON.parse(localStorage.getItem('mute-sound'));
   }
 
   ionViewDidLoad() {
@@ -143,5 +146,11 @@ export class SettingsPage {
     });
 
     alert.present();
+  }
+
+  mute(event: any) {
+    this.global.cLog(`in mute fun.`, event);
+    this.muteSound = event.value;
+    localStorage.setItem('mute-sound', JSON.stringify(this.muteSound));
   }
 }
