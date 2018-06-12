@@ -37,7 +37,7 @@ export class MenuPage {
   getEventDetails() {
     this.db.get('event-selected').then(res => {
       this.global.cLog(`getEventDetails's data `, res);
-      this.venueDetails.eventName = res.venue_name;
+      this.venueDetails.eventName = res.name;
       if (res.latitude && res.longitude) {
         this.getAddress(res.latitude, res.longitude);
       }
@@ -100,7 +100,7 @@ export class MenuPage {
     localStorage.removeItem('login-response');
     this.db.remove('login-response').then(res => { this.global.cLog(`successfully removed`) });
     this.global.user_credentials = null;
-    
+
     this.app.getRootNav().setRoot('LoginPage');
   }
 
@@ -135,11 +135,13 @@ export class MenuPage {
   }
 
   bulkUpdate() {
-    this.db.get('users').then(_users => {
+    this.db.get('users').then((_users: any[]) => {
 
       this.global.cLog(`users from db are`, _users);
 
       let data = _users.filter(_u => _u.checked);
+      // let data = _users.slice(0, 10);
+
       if (data) {
         this.global.putRequest(this.global.base_path + 'api/v1/attendees', data)
           .subscribe(
@@ -150,6 +152,7 @@ export class MenuPage {
               this.global.cLog(`in bulkUpdate and the response is `, res);
               _users.forEach((element, i) => {
                 _users[i].checked = true;
+                _users[i].synced = true;
               });
 
               this.db.create('users', _users).then(res => {

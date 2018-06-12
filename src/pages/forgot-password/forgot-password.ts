@@ -42,11 +42,12 @@ export class ForgotPasswordPage {
       let queryParams = `email=${this.forgetPasswordForm.controls['emailORusername'].value}&client_id=${this.global.client_id}&client_secret=${this.global.client_secret}`;
       this.global.cLog('resetting password form is valid', queryParams);
       this.global.showLoader();
-      this.global.putRequest(`${this.global.base_path}api/v1/user/reset?${queryParams}`, null)
+      this.global.putRequestUnauthorize(`${this.global.base_path}api/v1/user/reset?${queryParams}`, null)
         .subscribe(res => {
           this.global.isTokenExpire = false;
           this.global.hideLoader();
           this.global.cLog('reset password response', res);
+          this.global.showMessage(`You'll receive an email containing link to generate new password.`, 3500);
           setTimeout(() => {
             this.navCtrl.pop();
           }, 200);

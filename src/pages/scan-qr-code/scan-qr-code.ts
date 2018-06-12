@@ -89,7 +89,9 @@ export class ScanQrCodePage {
         if (user) {
           this.global.cLog(`User found `, user, ` now updating checked_in_time`);
           res[res.indexOf(user)].checked_in_at = (new Date()).toISOString();
-          res[res.indexOf(user)].checked = false;
+          res[res.indexOf(user)].checked = true;
+          res[res.indexOf(user)].synced = false;
+          
           this.db.create('users', res)
             .then(update => {
               this.global.cLog(`Users updated successfully`, update);

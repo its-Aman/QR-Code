@@ -36,7 +36,14 @@ export class SearchAttendantsPage {
 
     this.events.subscribe('basepat-changed', data => {
       this.global.cLog(`In basepat-changed`, data);
-      this.getAttendes();
+
+      // this.getAttendes();
+
+      this.db.get('users').then(res => {
+        this.global.cLog(`In db.get.users`, res);
+        this.attendants = res;
+      });
+
     });
 
   }
@@ -52,28 +59,42 @@ export class SearchAttendantsPage {
   getAttendes() {
     this.db.get('event-selected').then(data => {
       if (data) {
-        this.global.showLoader();
-        this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}&limit=200`)
-          .subscribe(res => {
 
-            this.global.isTokenExpire = false;
+        this.db.get('users').then(
+          attendants => {
+            this.global.cLog(`in getAttendes and the users is `, attendants);
 
-            this.global.hideLoader();
-            this.noData = false;
-            this.global.cLog('  ', res);
-            this.attendants = this.formatData(res);
-            this.attendants.forEach((_users, i) => {
-              this.global.cLog('asdf', _users, i);
-              this.attendants[i].checked = false;
-            });
+            if (!attendants) {
+              this.global.showLoader();
+              this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}&limit=200`)
+                .subscribe(res => {
 
-            this.db.create('users', this.attendants);
-          }, err => {
-            this.global.hideLoader();
-            this.noData = true;
-            this.global.showMessage(err.error);
-            this.global.cLog('getAttendes error', err);
+                  this.global.isTokenExpire = false;
+
+                  this.global.hideLoader();
+                  this.noData = false;
+                  this.global.cLog('  ', res);
+                  this.attendants = this.formatData(res);
+
+                  this.attendants.forEach((_users, i) => {
+                    this.global.cLog('asdf', _users, i);
+                    this.attendants[i].checked = false;
+                    this.attendants[i].synced = this.global.isValidDate(new Date(_users.registered_at));
+                  });
+
+                  this.db.create('users', this.attendants);
+                }, err => {
+                  this.global.hideLoader();
+                  this.noData = true;
+                  this.global.showMessage(err.error);
+                  this.global.cLog('getAttendes error', err);
+                });
+            } else {
+              this.attendants = attendants;
+            }
+
           });
+
       } else {
         this.noData = true;
         this.global.showMessage('No Event Selected');

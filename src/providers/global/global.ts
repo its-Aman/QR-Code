@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { Injectable } from '@angular/core';
 import { LoadingController, ToastController, Loading, Events } from 'ionic-angular';
 
-import { Observable } from 'rxjs/Observable';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { catchError, retry } from 'rxjs/operators';
 
@@ -146,6 +145,22 @@ export class GlobalProvider {
     );
   }
 
+  putRequestUnauthorize(url: string, data: any) {
+    this.cLog(`in putRequest and the this.user is`, this.user_credentials);
+    const httpOptions = {
+      // 'Authorization': "Bearer " + this.getToken(),
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    };
+
+    return this.http.put<any>(url, data, httpOptions)
+      .pipe(
+        retry(1),
+        catchError(err => this.handleError(err)),
+    );
+  }
+
   showMessage(message: string, duration: number = 2000, position: string = 'top') {
     this.toastCtrl.create({
       message: message,
@@ -252,5 +267,9 @@ export class GlobalProvider {
     else {
       // console.log("token not found")
     }
+  }
+
+  public isValidDate(d: any) {
+    return (!isNaN(d)) && (d instanceof Date);
   }
 }
