@@ -270,6 +270,10 @@ export class GlobalProvider {
   }
 
   public isValidDate(d: any) {
-    return (!isNaN(d)) && (d instanceof Date);
+    if (!d) {
+      return false;
+    } else {
+      return (!isNaN(d)) && (d instanceof Date);
+    }
   }
 }

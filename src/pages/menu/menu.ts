@@ -139,10 +139,12 @@ export class MenuPage {
 
       this.global.cLog(`users from db are`, _users);
 
-      let data = _users.filter(_u => _u.checked);
+      let data = _users.filter(_u => _u.checked && !_u.synced);
       // let data = _users.slice(0, 10);
 
-      if (data) {
+      this.global.cLog(`data to be posted is`, data);
+
+      if (data.length > 0) {
         this.global.putRequest(this.global.base_path + 'api/v1/attendees', data)
           .subscribe(
             res => {
@@ -157,6 +159,7 @@ export class MenuPage {
 
               this.db.create('users', _users).then(res => {
                 this.showAlert(`Server Message`, `Synchronization successfull`);
+                this.events.publish('ionViewDidEnter-MenuPage');
               });
 
             }, err => {
