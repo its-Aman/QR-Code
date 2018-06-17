@@ -64,7 +64,7 @@ export class LoginPage {
           this.global.isTokenExpire = false;
           this.global.hideLoader();
           this.global.cLog('api response', res);
-          this.global.showMessage('Login successfull!!!');
+          this.global.showMessage(this.global.LoginSuccessfull);
           this.global.user_credentials = res;
           localStorage.setItem('login-response', JSON.stringify(res));
           this.db.create('login-response', res).then(res => {

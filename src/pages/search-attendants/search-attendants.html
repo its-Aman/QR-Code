@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar *ngIf="!isSearch">
-    <ion-title>Search Attendants</ion-title>
+    <ion-title>{{global?.SearchAttendants}}</ion-title>
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
@@ -12,7 +12,8 @@
   </ion-navbar>
 
   <ion-navbar *ngIf="isSearch">
-    <ion-searchbar [(ngModel)]="searchKey" [showCancelButton]="shouldShowCancel" (ionInput)="onInput($event)" (ionClear)="search('ionClear')">
+    <ion-searchbar [(ngModel)]="searchKey" [showCancelButton]="shouldShowCancel" [placeholder]="global.Search" (ionInput)="onInput($event)"
+      (ionClear)="search('ionClear')">
     </ion-searchbar>
   </ion-navbar>
 </ion-header>
@@ -22,8 +23,9 @@
   <ion-list no-lines *ngIf="!noData || !noSearchResult">
     <ion-item *ngFor="let attendant of attendants; let i=index;" (click)="openDetails(i)">
       <p class="name">{{attendant?.name}}</p>
-      <p *ngIf="attendant?.checked" [class.red]="!attendant?.synced" class="time">{{attendant?.checked_in_at | date:'yyyy-MM-dd HH:mm'}}</p>
-      <p *ngIf="!attendant?.checked" class="time">&lt;not checked&gt;</p>
+      <p *ngIf="attendant?.checked && attendant?.isToday" [class.red]="!attendant?.synced" class="time">{{attendant?.checked_in_at | date:'HH:mm'}}</p>
+      <p *ngIf="attendant?.checked && !attendant?.isToday" [class.red]="!attendant?.synced" class="time">{{attendant?.checked_in_at | date:'yyyy-MM-dd HH:mm'}}</p>
+      <p *ngIf="!attendant?.checked" class="time">&lt;{{global?.NotChecked}}&gt;</p>
     </ion-item>
   </ion-list>
 
@@ -32,7 +34,7 @@
       <ion-col class="no-data">
         <div class="chair image"></div>
         <div>
-          No attendees found!
+          {{global?.NoAttendeesFound}}
         </div>
       </ion-col>
     </ion-row>

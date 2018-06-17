@@ -16,15 +16,15 @@
 
   <ion-content class="menu">
     <ion-list text-center>
-      <button menuClose ion-item (click)="scanQRCode()"> Scan QRCodes </button>
-      <button menuClose ion-item (click)="syncToServer()"> Sync to server </button>
-      <button menuClose ion-item (click)="cleanEventData()"> Clean event data </button>
-      <button menuClose ion-item (click)="changeEvent()"> Change event </button>
+      <button menuClose ion-item (click)="scanQRCode()"> {{global?.ScanQRCodes}} </button>
+      <button menuClose ion-item (click)="syncToServer()"> {{global?.SyncToServer}} </button>
+      <button menuClose ion-item (click)="cleanEventData()"> {{global?.CleanEventData}} </button>
+      <button menuClose ion-item (click)="changeEvent()"> {{global?.ChangeEvent}} </button>
     </ion-list>
 
     <ion-list text-center class="list-second">
-      <button menuClose ion-item (click)="settings()"> Settings </button>
-      <button menuClose ion-item (click)="signout()"> Sign Out </button>
+      <button menuClose ion-item (click)="settings()"> {{global?.Setting}} </button>
+      <button menuClose ion-item (click)="signout()"> {{global?.Signout}} </button>
     </ion-list>
   </ion-content>
 

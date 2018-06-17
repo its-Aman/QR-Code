@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Login</ion-title>
+    <ion-title>{{global?.Login}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="openMenu()">
         <ion-icon ios="md-more" md="md-more"></ion-icon>
@@ -34,17 +34,17 @@
         <form [formGroup]="loginForm">
           <ion-list>
             <ion-item>
-              <ion-label color="primary" floating>Email</ion-label>
+              <ion-label color="primary" floating>{{global?.Email}}</ion-label>
               <ion-input formControlName="username" type="email" (keyup.enter)="login()"></ion-input>
             </ion-item>
-            <p class="error" *ngIf="loginForm?.controls['username']?.hasError('required') && (loginForm?.controls['username']?.dirty || isFormInvalid)">Email is Required</p>
-            <p class="error" *ngIf="loginForm?.controls['username']?.hasError('email') && (loginForm?.controls['username']?.dirty || isFormInvalid)">Not a valid email</p>
+            <p class="error" *ngIf="loginForm?.controls['username']?.hasError('required') && (loginForm?.controls['username']?.dirty || isFormInvalid)">{{global?.EmailIsRequired}}</p>
+            <p class="error" *ngIf="loginForm?.controls['username']?.hasError('email') && (loginForm?.controls['username']?.dirty || isFormInvalid)">{{global?.NotAValidEmail}}</p>
 
             <ion-item>
-              <ion-label color="primary" floating>Password</ion-label>
+              <ion-label color="primary" floating>{{global?.Password}}</ion-label>
               <ion-input formControlName="password" type="password" (keyup.enter)="login()"></ion-input>
             </ion-item>
-            <p class="error" *ngIf="loginForm?.controls['password']?.hasError('required') && (loginForm?.controls['password']?.dirty || isFormInvalid)">Password is Required</p>
+            <p class="error" *ngIf="loginForm?.controls['password']?.hasError('required') && (loginForm?.controls['password']?.dirty || isFormInvalid)">{{global?.PasswordIsRequired}}</p>
           </ion-list>
         </form>
       </ion-col>
@@ -52,10 +52,10 @@
 
     <ion-row>
       <ion-col col-12 class="loginButton">
-        <button ion-button block (click)="login()">Login</button>
+        <button ion-button block (click)="login()">{{global?.Login}}</button>
       </ion-col>
       <ion-col col-12 text-right class="forgotText">
-        <p (click)="forgotPassword()">I forgot my password</p>
+        <p (click)="forgotPassword()">{{global?.IForgotMyPassword}}</p>
       </ion-col>
     </ion-row>
   </ion-grid>

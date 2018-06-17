@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, TabHighlight } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { GlobalProvider } from '../../providers/global/global';
 
@@ -47,7 +47,7 @@ export class ForgotPasswordPage {
           this.global.isTokenExpire = false;
           this.global.hideLoader();
           this.global.cLog('reset password response', res);
-          this.global.showMessage(`You'll receive an email containing link to generate new password.`, 3500);
+          this.global.showMessage(this.global.YoullReceiveAnEmailContainingLink, 3500);
           setTimeout(() => {
             this.navCtrl.pop();
           }, 200);

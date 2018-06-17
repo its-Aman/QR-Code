@@ -440,4 +440,264 @@ export class GlobalProvider {
     }
     catch (e) { }
   }
+
+  /**
+   getAttendes() {
+    this.db.get('event-selected').then(data => {
+      if (data) {
+
+        this.db.get('users').then(
+          (attendantsFromDB: any[]) => {
+            this.global.cLog(`in getAttendes and attendantsFromDB is `, attendantsFromDB);
+
+            this.global.showLoader();
+            this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}`)
+              .subscribe(res => {
+
+                this.global.isTokenExpire = false;
+
+                this.global.hideLoader();
+                this.noData = false;
+                this.global.cLog(`getAttendes's response is `, res);
+
+                let attendantsFromAPI = this.formatData(res);
+                // debugger;
+                if (attendantsFromDB.length <= 0) {
+
+                  this.global.cLog(`no attendants in db`);
+
+                  this.attendants = attendantsFromAPI;
+
+                  this.attendants.forEach((attendant, i) => {
+                    this.global.cLog('asdf', attendant, i);
+                    this.attendants[i].checked = this.attendants[i].checked_in_at ? this.global.isValidDate(this.attendants[i].checked_in_at) : false;
+                    this.attendants[i].synced = this.attendants[i].registered_at ? this.global.isValidDate(this.attendants[i].registered_at) : false;
+                  });
+
+                } else {
+
+                  this.global.cLog(`attendents are present in db.`);
+
+                  let newAttendantToBeUpdatedInDB: any[] = [];
+
+                  if (attendantsFromAPI.length > attendantsFromDB.length) {
+
+                    this.global.cLog(`in attendantsFromAPI's length is more`);
+
+                    attendantsFromAPI.forEach((singleAttendantFromAPI, i) => {
+                      newAttendantToBeUpdatedInDB.push(singleAttendantFromAPI);
+
+                      if (+attendantsFromAPI[i].id == +attendantsFromDB[i].id) {
+
+                        // newAttendantToBeUpdatedInDB[i].checked =
+                        //   (attendantsFromAPI[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) : false)
+                        //   ||
+                        //   (attendantsFromDB[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at)) : false);
+
+                        // newAttendantToBeUpdatedInDB[i].synced = attendantsFromAPI[i].registered_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) : false ? true : newAttendantToBeUpdatedInDB[i].checked;
+
+                        //checking for api data
+                        if (
+                          (attendantsFromAPI[i].checked_in_at && this.global.isValidDate(attendantsFromAPI[i].checked_in_at))
+                          &&
+                          !(attendantsFromDB[i].checked_in_at && this.global.isValidDate(attendantsFromDB[i].checked_in_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].checked = true;
+                          newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromAPI[i].checked_in_at;
+                        }
+
+                        if (
+                          (attendantsFromAPI[i].registered_at && this.global.isValidDate(attendantsFromAPI[i].registered_at))
+                          &&
+                          !(attendantsFromDB[i].registered_at && this.global.isValidDate(attendantsFromDB[i].registered_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].synced = true
+                          newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromAPI[i].registered_at;
+                        }
+
+                        //checking for local values
+                        if (
+                          !(attendantsFromAPI[i].checked_in_at && this.global.isValidDate(attendantsFromAPI[i].checked_in_at))
+                          &&
+                          (attendantsFromDB[i].checked_in_at && this.global.isValidDate(attendantsFromDB[i].checked_in_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].checked = true;
+                          newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromDB[i].checked_in_at;
+                        }
+
+                        if (
+                          !(attendantsFromAPI[i].registered_at && this.global.isValidDate(attendantsFromAPI[i].registered_at))
+                          &&
+                          (attendantsFromDB[i].registered_at && this.global.isValidDate(attendantsFromDB[i].registered_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].synced = true
+                          newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromDB[i].registered_at;
+                        }
+
+                        //not found any value either 
+                        if (
+                          !(attendantsFromAPI[i].checked_in_at && this.global.isValidDate(attendantsFromAPI[i].checked_in_at))
+                          &&
+                          !(attendantsFromDB[i].checked_in_at && this.global.isValidDate(attendantsFromDB[i].checked_in_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].checked = false;
+                          newAttendantToBeUpdatedInDB[i].checked_in_at = `0000-00-00 00:00:00`;
+                        }
+
+                        if (
+                          !(attendantsFromAPI[i].registered_at && this.global.isValidDate(attendantsFromAPI[i].registered_at))
+                          &&
+                          !(attendantsFromDB[i].registered_at && this.global.isValidDate(attendantsFromDB[i].registered_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].synced = false;
+                          newAttendantToBeUpdatedInDB[i].registered_at = `0000-00-00 00:00:00`;
+                        }
+
+                        // if (attendantsFromAPI[i].checked_in_at && this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) && !this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at))) {
+                        //   newAttendantToBeUpdatedInDB[i].checked = true;
+                        //   newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromAPI[i].checked_in_at;
+                        // } else if (attendantsFromDB[i].checked_in_at && !this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) && this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at))) {
+                        //   newAttendantToBeUpdatedInDB[i].checked = true;
+                        //   newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromDB[i].checked_in_at;
+                        // } else if (attendantsFromDB[i].checked_in_at && attendantsFromAPI[i].checked_in_at && !this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) && this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at))) {
+                        //   newAttendantToBeUpdatedInDB[i].checked = true;
+                        //   newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromAPI[i].checked_in_at;
+                        // } else {
+                        //   newAttendantToBeUpdatedInDB[i].checked = false;
+                        //   newAttendantToBeUpdatedInDB[i].checked_in_at = null;
+                        // }
+
+                        // if (attendantsFromAPI[i].registered_at && this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) && !this.global.isValidDate(new Date(attendantsFromDB[i].registered_at))) {
+                        //   newAttendantToBeUpdatedInDB[i].synced = true;
+                        //   newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromAPI[i].registered_at;
+                        // } else if (attendantsFromDB[i].registered_at && !this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) && this.global.isValidDate(new Date(attendantsFromDB[i].registered_at))) {
+                        //   newAttendantToBeUpdatedInDB[i].synced = false;
+                        //   newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromDB[i].registered_at;
+                        // } else if (attendantsFromAPI[i].registered_at && attendantsFromDB[i].registered_at && !this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) && this.global.isValidDate(new Date(attendantsFromDB[i].registered_at))) {
+                        //   newAttendantToBeUpdatedInDB[i].synced = true;
+                        //   newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromAPI[i].registered_at;
+                        // } else {
+                        //   newAttendantToBeUpdatedInDB[i].synced = false;
+                        //   newAttendantToBeUpdatedInDB[i].registered_at = null;
+                        // }
+
+                        this.global.cLog(`id's matched in attendantsFromAPI's block`, newAttendantToBeUpdatedInDB[i]);
+                      } else {
+
+                        newAttendantToBeUpdatedInDB[i].checked = attendantsFromAPI[i].checked_in_at ? this.global.isValidDate(attendantsFromAPI[i].checked_in_at) : false;
+                        newAttendantToBeUpdatedInDB[i].synced = attendantsFromAPI[i].registered_at ? this.global.isValidDate(attendantsFromAPI[i].registered_at) : false;
+
+                        this.global.cLog(`id's didn't matched in attendantsFromAPI's block`, newAttendantToBeUpdatedInDB[i]);
+                      }
+                    });
+
+                  } else {
+
+                    this.global.cLog(`in attendantsFromDB's length is more`);
+
+                    attendantsFromDB.forEach((singleAttendantFromDB, i) => {
+                      newAttendantToBeUpdatedInDB.push(singleAttendantFromDB);
+
+                      if (+attendantsFromAPI[i].id == +attendantsFromDB[i].id) {
+                        // newAttendantToBeUpdatedInDB[i].checked =
+                        //   (attendantsFromAPI[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) : false)
+                        //   ||
+                        //   (attendantsFromDB[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at)) : false);
+
+                        // newAttendantToBeUpdatedInDB[i].synced =
+                        //   (attendantsFromAPI[i].registered_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) : false)
+                        //     ? true : newAttendantToBeUpdatedInDB[i].checked;
+
+                        //checking for api data
+                        if (
+                          (attendantsFromAPI[i].checked_in_at && this.global.isValidDate(attendantsFromAPI[i].checked_in_at))
+                          &&
+                          !(attendantsFromDB[i].checked_in_at && this.global.isValidDate(attendantsFromDB[i].checked_in_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].checked = true;
+                          newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromAPI[i].checked_in_at;
+                        }
+
+                        if (
+                          (attendantsFromAPI[i].registered_at && this.global.isValidDate(attendantsFromAPI[i].registered_at))
+                          &&
+                          !(attendantsFromDB[i].registered_at && this.global.isValidDate(attendantsFromDB[i].registered_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].synced = true
+                          newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromAPI[i].registered_at;
+                        }
+
+                        //checking for local values
+                        if (
+                          !(attendantsFromAPI[i].checked_in_at && this.global.isValidDate(attendantsFromAPI[i].checked_in_at))
+                          &&
+                          (attendantsFromDB[i].checked_in_at && this.global.isValidDate(attendantsFromDB[i].checked_in_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].checked = true;
+                          newAttendantToBeUpdatedInDB[i].checked_in_at = attendantsFromDB[i].checked_in_at;
+                        }
+
+                        if (
+                          !(attendantsFromAPI[i].registered_at && this.global.isValidDate(attendantsFromAPI[i].registered_at))
+                          &&
+                          (attendantsFromDB[i].registered_at && this.global.isValidDate(attendantsFromDB[i].registered_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].synced = true
+                          newAttendantToBeUpdatedInDB[i].registered_at = attendantsFromDB[i].registered_at;
+                        }
+
+                        //not found any value either 
+                        if (
+                          !(attendantsFromAPI[i].checked_in_at && this.global.isValidDate(attendantsFromAPI[i].checked_in_at))
+                          &&
+                          !(attendantsFromDB[i].checked_in_at && this.global.isValidDate(attendantsFromDB[i].checked_in_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].checked = false;
+                          newAttendantToBeUpdatedInDB[i].checked_in_at = `0000-00-00 00:00:00`;
+                        }
+
+                        if (
+                          !(attendantsFromAPI[i].registered_at && this.global.isValidDate(attendantsFromAPI[i].registered_at))
+                          &&
+                          !(attendantsFromDB[i].registered_at && this.global.isValidDate(attendantsFromDB[i].registered_at))
+                        ) {
+                          newAttendantToBeUpdatedInDB[i].synced = false;
+                          newAttendantToBeUpdatedInDB[i].registered_at = `0000-00-00 00:00:00`;
+                        }
+
+                        this.global.cLog(`id's matched in attendantsFromDB's block`, newAttendantToBeUpdatedInDB[i]);
+
+                      } else {
+                        newAttendantToBeUpdatedInDB[i].checked = attendantsFromDB[i].checked_in_at ? this.global.isValidDate(attendantsFromDB[i].checked_in_at) : false;
+                        newAttendantToBeUpdatedInDB[i].synced = attendantsFromDB[i].registered_at ? this.global.isValidDate(attendantsFromDB[i].registered_at) : false;
+
+                        this.global.cLog(`id's didn't matched in attendantsFromDB's block`, newAttendantToBeUpdatedInDB[i]);
+
+                      }
+                    });
+
+                  }
+                  this.attendants = newAttendantToBeUpdatedInDB;
+                }
+
+                this.db.create('users', this.attendants);
+              }, err => {
+                this.global.hideLoader();
+                this.noData = true;
+                this.global.showMessage(err.error);
+                this.global.cLog('getAttendes error', err);
+              });
+          }).catch(err => {
+            this.global.cLog(`no users present in local database`, err);
+          });
+
+      } else {
+        this.noData = true;
+        this.global.showMessage(this.global.NoEventSelected);
+      }
+    }).catch(err => {
+      this.global.cLog(`no event present in local database`, err);
+    });
+  }
+   */
 }

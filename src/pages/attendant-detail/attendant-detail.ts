@@ -138,7 +138,7 @@ export class AttendantDetailPage {
       this.totalUsers = users.length;
 
       users.forEach((_user, i) => {
-        if (_user.checked) {
+        if (_user.checked && _user.synced) {
           this.checkedInUser++;
         }
       });

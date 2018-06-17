@@ -21,6 +21,7 @@ export class SettingsPage {
     private events: Events,
   ) {
     this.muteSound = JSON.parse(localStorage.getItem('mute-sound'));
+    this.global.reflectchangedLanguage();
   }
 
   ionViewDidLoad() {
@@ -35,27 +36,30 @@ export class SettingsPage {
     this.global.cLog('in changeLanguage()');
 
     let alert = this.alrtCtrl.create();
-    alert.setTitle('Choose Language');
+    alert.setTitle(this.global.ChooseLanguage);
     alert.addInput({
       type: 'radio',
       label: 'English',
       value: 'en',
-      checked: true
+      checked: this.global.language == 'en',
     });
 
     alert.addInput({
       type: 'radio',
       label: 'Español',
       value: 'es',
-      checked: false
+      checked: this.global.language == 'es'
     });
 
     alert.addButton('Cancel');
     alert.addButton({
       text: "Done",
       handler: (val) => {
-        this.global.cLog('HAndler value is', val);
-        this.db.create('language', val);
+        this.global.cLog('Handler value is', val);
+        // this.db.create('language', val);
+        localStorage.setItem('lang', val);
+        this.global.language = val;
+        this.global.reflectchangedLanguage();
       }
     });
 
@@ -67,7 +71,7 @@ export class SettingsPage {
     let selectedSound = JSON.parse(localStorage.getItem('sound'));
 
     let alert = this.alrtCtrl.create({
-      title: "Change Sound",
+      title: this.global.ChangeSound,
       inputs: [
         {
           type: 'radio',
@@ -123,11 +127,11 @@ export class SettingsPage {
 
   changeBasePath() {
     let alert = this.alrtCtrl.create({
-      title: "Change BasePath",
+      title: this.global.ChangeBasePath,
       inputs: [{
         type: 'input',
-        placeholder: 'Type basepath',
-        value: JSON.parse(localStorage.getItem('basepath'))["0"] || this.global.base_path
+        placeholder: this.global.TypeBasepath,
+        value: this.global.base_path,
       }],
       buttons: [
         {
@@ -138,7 +142,7 @@ export class SettingsPage {
           text: 'Change',
           handler: (val) => {
             this.global.cLog(`in change basepath and the new basepath is `, val, val["0"]);
-            localStorage.setItem('basepath', JSON.stringify(val));
+            localStorage.setItem('basepath', val["0"]);
             this.events.publish('basepat-changed', val["0"]);
             this.global.base_path = val["0"];
           }
@@ -153,4 +157,6 @@ export class SettingsPage {
     this.muteSound = event.value;
     localStorage.setItem('mute-sound', JSON.stringify(this.muteSound));
   }
+
+
 }

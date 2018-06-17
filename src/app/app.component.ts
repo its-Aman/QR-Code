@@ -27,13 +27,16 @@ export class MyApp {
   ) {
 
     // this.refreshTokenLogic();
-
+    this.global.cLog(`in app component`);
+    
     this.initializeApp();
     this.listenForTokenExpire();
+    this.global.reflectchangedLanguage();
 
     let sound = JSON.parse(localStorage.getItem('sound'));
-    let basePath = JSON.parse(localStorage.getItem('basepath'));
+    let basePath = localStorage.getItem('basepath');
     let muteSound = JSON.parse(localStorage.getItem('mute-sound'));
+    let lang = localStorage.getItem('lang');
 
     this.global.cLog(`preloaded sound is `, sound);
     this.global.cLog(`preloaded basepath is `, basePath);
@@ -46,8 +49,13 @@ export class MyApp {
       localStorage.setItem('sound', JSON.stringify('cycle.mp3'));
     }
 
-    if (basePath && basePath["0"]) {
-      this.global.base_path = basePath["0"];
+    if (!basePath) {
+      this.global.base_path = 'http://eventonline.info:3500/';
+      localStorage.setItem('basepath', this.global.base_path);
+    }
+
+    if (!lang) {
+      localStorage.setItem('lang', 'en');
     }
 
     db.get(`login-response`).then(res => {

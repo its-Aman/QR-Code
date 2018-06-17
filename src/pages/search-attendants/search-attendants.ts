@@ -2,6 +2,7 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { DatePipe } from '@angular/common';
 
 @IonicPage()
 @Component({
@@ -16,6 +17,7 @@ export class SearchAttendantsPage {
   searchKey: string;
   attendants: any[];
   noData: boolean;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -66,7 +68,7 @@ export class SearchAttendantsPage {
             this.global.cLog(`in getAttendes and attendantsFromDB is `, attendantsFromDB);
 
             this.global.showLoader();
-            this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}&limit=200`)
+            this.global.getRequest(`${this.global.base_path}api/v1/attendees?instance_id=${data.instance}`)
               .subscribe(res => {
 
                 this.global.isTokenExpire = false;
@@ -76,8 +78,8 @@ export class SearchAttendantsPage {
                 this.global.cLog(`getAttendes's response is `, res);
 
                 let attendantsFromAPI = this.formatData(res);
-
-                if (attendantsFromDB.length <= 0) {
+                // debugger;
+                if (!attendantsFromDB) {
 
                   this.global.cLog(`no attendants in db`);
 
@@ -85,8 +87,9 @@ export class SearchAttendantsPage {
 
                   this.attendants.forEach((attendant, i) => {
                     this.global.cLog('asdf', attendant, i);
-                    this.attendants[i].checked = this.attendants[i].checked_in_at ? this.global.isValidDate(new Date(this.attendants[i].checked_in_at)) : false;
-                    this.attendants[i].synced = this.attendants[i].checked ? this.attendants[i].checked : this.global.isValidDate(new Date(this.attendants[i].registered_at));
+                    this.attendants[i].checked = this.attendants[i].checked_in_at ? true : false;
+                    this.attendants[i].synced = true;
+                    this.attendants[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(this.attendants[i].checked_in_at).setHours(0, 0, 0, 0);
                   });
 
                 } else {
@@ -95,64 +98,69 @@ export class SearchAttendantsPage {
 
                   let newAttendantToBeUpdatedInDB: any[] = [];
 
-                  if (attendantsFromAPI.length > attendantsFromDB.length) {
+                  let length = attendantsFromAPI.length > attendantsFromDB.length ? attendantsFromAPI.length : attendantsFromDB.length;
+                  let isApiArrayBig: boolean = attendantsFromAPI.length > attendantsFromDB.length;
 
-                    this.global.cLog(`in attendantsFromAPI's length is more`);
+                  for (let i = 0; i < length; i++) {
 
-                    attendantsFromAPI.forEach((singleAttendantFromAPI, i) => {
-                      newAttendantToBeUpdatedInDB.push(singleAttendantFromAPI);
-
-                      if (+attendantsFromAPI[i].id == +attendantsFromDB[i].id) {
-
-                        newAttendantToBeUpdatedInDB[i].checked =
-                          (attendantsFromAPI[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) : false)
-                          ||
-                          (attendantsFromDB[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at)) : false);
-
-                        newAttendantToBeUpdatedInDB[i].synced = attendantsFromAPI[i].registered_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) : false ? true : newAttendantToBeUpdatedInDB[i].checked;
-
-                        this.global.cLog(`id's matched in attendantsFromAPI's block`, newAttendantToBeUpdatedInDB[i]);
+                    if (+attendantsFromAPI[i].id == +attendantsFromDB[i].id) {
+                      if (attendantsFromAPI[i].checked_in_at && !attendantsFromDB[i].checked_in_at) {
+                        attendantsFromAPI[i].checked = true;
+                        attendantsFromAPI[i].synced = true;
+                        attendantsFromAPI[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromAPI[i].checked_in_at).setHours(0, 0, 0, 0);
+                        newAttendantToBeUpdatedInDB.push(attendantsFromAPI[i]);
+                      } else if (!attendantsFromAPI[i].checked_in_at && attendantsFromDB[i].checked_in_at) {
+                        attendantsFromDB[i].checked = true;
+                        attendantsFromDB[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromDB[i].checked_in_at).setHours(0, 0, 0, 0);
+                        newAttendantToBeUpdatedInDB.push(attendantsFromDB[i]);
+                      } else if (attendantsFromAPI[i].checked_in_at && attendantsFromDB[i].checked_in_at) {
+                        if (new Date(attendantsFromAPI[i].checked_in_at).getTime() < new Date(attendantsFromDB[i].checked_in_at).getTime()) {
+                          attendantsFromDB[i].checked = attendantsFromDB[i].checked_in_at ? true : false;
+                          attendantsFromDB[i].synced = true;
+                          attendantsFromDB[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromDB[i].checked_in_at).setHours(0, 0, 0, 0);
+                          newAttendantToBeUpdatedInDB.push(attendantsFromDB[i]);
+                        } else {
+                          attendantsFromAPI[i].checked = attendantsFromAPI[i].checked_in_at ? true : false;
+                          attendantsFromAPI[i].synced = true;
+                          attendantsFromAPI[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromAPI[i].checked_in_at).setHours(0, 0, 0, 0);
+                          newAttendantToBeUpdatedInDB.push(attendantsFromAPI[i]);
+                        }
                       } else {
-
-                        newAttendantToBeUpdatedInDB[i].checked = attendantsFromAPI[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) : false;
-                        newAttendantToBeUpdatedInDB[i].synced = attendantsFromAPI[i].registered_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) : false;
-
-                        this.global.cLog(`id's didn't matched in attendantsFromAPI's block`, newAttendantToBeUpdatedInDB[i]);
+                        if (isApiArrayBig) {
+                          attendantsFromAPI[i].checked = attendantsFromAPI[i].checked_in_at ? true : false;
+                          attendantsFromAPI[i].synced = true;
+                          attendantsFromAPI[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromAPI[i].checked_in_at).setHours(0, 0, 0, 0);
+                          newAttendantToBeUpdatedInDB.push(attendantsFromAPI[i]);
+                        } else {
+                          attendantsFromDB[i].checked = attendantsFromDB[i].checked_in_at ? true : false;
+                          attendantsFromDB[i].synced = true;
+                          attendantsFromDB[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromDB[i].checked_in_at).setHours(0, 0, 0, 0);
+                          newAttendantToBeUpdatedInDB.push(attendantsFromDB[i]);
+                        }
                       }
-                    });
 
-                  } else {
+                      this.global.cLog(`id's matched in attendantsFromAPI's block`, newAttendantToBeUpdatedInDB[i]);
+                    } else {
 
-                    this.global.cLog(`in attendantsFromDB's length is more`);
-
-                    attendantsFromDB.forEach((singleAttendantFromDB, i) => {
-                      newAttendantToBeUpdatedInDB.push(singleAttendantFromDB);
-
-                      if (+attendantsFromAPI[i].id == +attendantsFromDB[i].id) {
-                        newAttendantToBeUpdatedInDB[i].checked =
-                          (attendantsFromAPI[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].checked_in_at)) : false)
-                          ||
-                          (attendantsFromDB[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at)) : false);
-
-                        newAttendantToBeUpdatedInDB[i].synced =
-                          (attendantsFromAPI[i].registered_at ? this.global.isValidDate(new Date(attendantsFromAPI[i].registered_at)) : false)
-                            ? true : newAttendantToBeUpdatedInDB[i].checked;
-
-                        this.global.cLog(`id's matched in attendantsFromDB's block`, newAttendantToBeUpdatedInDB[i]);
-
+                      if (isApiArrayBig) {
+                        attendantsFromAPI[i].checked = attendantsFromAPI[i].checked_in_at ? true : false;
+                        attendantsFromAPI[i].synced = true;
+                        attendantsFromAPI[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromAPI[i].checked_in_at).setHours(0, 0, 0, 0);
+                        newAttendantToBeUpdatedInDB.push(attendantsFromAPI[i]);
                       } else {
-                        newAttendantToBeUpdatedInDB[i].checked = attendantsFromDB[i].checked_in_at ? this.global.isValidDate(new Date(attendantsFromDB[i].checked_in_at)) : false;
-                        newAttendantToBeUpdatedInDB[i].synced = attendantsFromDB[i].registered_at ? this.global.isValidDate(new Date(attendantsFromDB[i].registered_at)) : false;
-
-                        this.global.cLog(`id's didn't matched in attendantsFromDB's block`, newAttendantToBeUpdatedInDB[i]);
-
+                        attendantsFromDB[i].checked = attendantsFromDB[i].checked_in_at ? true : false;
+                        attendantsFromDB[i].synced = true;
+                        attendantsFromDB[i].isToday = new Date().setHours(0, 0, 0, 0) == new Date(attendantsFromDB[i].checked_in_at).setHours(0, 0, 0, 0);
+                        newAttendantToBeUpdatedInDB.push(attendantsFromDB[i]);
                       }
-                    });
+
+                      this.global.cLog(`id's didn't matched in attendantsFromAPI's block`, newAttendantToBeUpdatedInDB[i]);
+                    }
 
                   }
                   this.attendants = newAttendantToBeUpdatedInDB;
-                }
 
+                }
                 this.db.create('users', this.attendants);
               }, err => {
                 this.global.hideLoader();
@@ -166,7 +174,7 @@ export class SearchAttendantsPage {
 
       } else {
         this.noData = true;
-        this.global.showMessage('No Event Selected');
+        this.global.showMessage(this.global.NoEventSelected);
       }
     }).catch(err => {
       this.global.cLog(`no event present in local database`, err);

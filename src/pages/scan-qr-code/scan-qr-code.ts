@@ -76,7 +76,7 @@ export class ScanQrCodePage {
     }).catch(err => {
       this.global.cLog("some error in prepare", err);
       if (err.code == 1) {
-        this.global.showMessage(`The app needs the camera to scan QR codes`);
+        this.global.showMessage(this.global.TheAppNeedsTheCameraToScanQRCodes);
       }
     });
   }
@@ -95,7 +95,9 @@ export class ScanQrCodePage {
 
           res[res.indexOf(user)].checked_in_at = (new Date()).toISOString();
           res[res.indexOf(user)].checked = true;
-          res[res.indexOf(user)].synced = this.global.isValidDate(new Date(user.registered_at));
+          res[res.indexOf(user)].synced = false;
+          res[res.indexOf(user)].isToday = true;
+          // res[res.indexOf(user)].isToday = new Date().setHours(0, 0, 0, 0) == new Date(res[res.indexOf(user)].checked_in_at).setHours(0, 0, 0, 0);
 
           this.db.create('users', res)
             .then(update => {
@@ -188,7 +190,7 @@ export class ScanQrCodePage {
     let selectedSound = JSON.parse(localStorage.getItem('sound'));
     this.global.cLog(`in play sound and the selected sound is`, selectedSound)
     if (!selectedSound) {
-      this.global.showMessage(`Please select a sound in settings`);
+      this.global.showMessage(this.global.PleaseSelectASoundInSettings);
       return;
     } else {
       this.nativeAudio.preloadSimple(selectedSound, `assets/sounds/${selectedSound}`)
@@ -226,5 +228,16 @@ export class ScanQrCodePage {
     } else {
       this.navCtrl.push('AttendantDetailPage', { data: { isValid: true } });
     }
+  }
+
+  ionViewDidLeave() {
+    this.qrScanner.destroy()
+      .then(res => this.global.cLog(`ionViewDidLeave's destroy success `, res))
+      .catch(err => this.global.cLog(`ionViewDidLeave's destroy error `, err));
+
+    this.qrScanner.hide()
+      .then(res => this.global.cLog(`ionViewDidLeave's hide success `, res))
+      .catch(err => this.global.cLog(`ionViewDidLeave's hide error `, err));
+
   }
 }

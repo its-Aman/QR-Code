@@ -76,7 +76,7 @@ export class MenuPage {
       this.global.cLog('Clearing event log data');
       this.db.remove('users').then(res => {
         this.db.remove('event-selected').then(res => {
-          this.global.showMessage(`Data Cleared Successfully`);
+          this.global.showMessage(this.global.DataClearedSuccessfully);
         });
       });
       this.app.getRootNav().setRoot('SelectActiveEventPage', { data: null });
@@ -158,19 +158,19 @@ export class MenuPage {
               });
 
               this.db.create('users', _users).then(res => {
-                this.showAlert(`Server Message`, `Synchronization successfull`);
+                this.showAlert(this.global.ServerMessage, this.global.SynchronizationSuccessfull);
                 this.events.publish('ionViewDidEnter-MenuPage');
               });
 
             }, err => {
               this.global.cLog(`some error in bulkUpdate `, err);
-              this.showAlert(`Error`, `There has been errors trying to sync. Check with your administrator`);
+              this.showAlert(this.global.Error, this.global.ThereHasBeenErrorsTryingToSync);
               this.global.showMessage(err.error);
               this.events.publish('basepat-changed', { key: "From menu bulk update", value: true });
             }
           )
       } else {
-        this.showAlert(`Alert`, `No User to sync`);
+        this.showAlert(this.global.Alert, this.global.NoUserToSync);
       }
     });
   }
