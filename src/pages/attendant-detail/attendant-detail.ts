@@ -156,4 +156,8 @@ export class AttendantDetailPage {
       });
   }
 
+
+  backButtonClick(e){
+    this.global.cLog(`backButtonClick() `, e);
+  }
 }

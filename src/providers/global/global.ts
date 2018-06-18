@@ -90,6 +90,7 @@ export class GlobalProvider {
   Alert: string;
   NoUserToSync: string;
   ChooseLanguage: string;
+  Back: String;
   constructor(
     private http: HttpClient,
     private toastCtrl: ToastController,
@@ -391,11 +392,11 @@ export class GlobalProvider {
       this.Alert = `Alert`;
       this.NoUserToSync = `No User to sync`;
       this.ChooseLanguage = `Choose Language`;
-
+      this.Back = `Back`;
     } else {
 
       this.ScanQRCodes = `Escanear códigos QR`;
-      this.SyncToServer = `servidor`;
+      this.SyncToServer = `Sincronizar servidor`;
       this.CleanEventData = `Borrar datos evento`;
       this.ChangeEvent = `Cambiar evento`;
       this.Setting = `Configuracion`;
@@ -448,6 +449,7 @@ export class GlobalProvider {
       this.Alert = `Ningún usuario para sincronizar`;
       this.NoUserToSync = `Alerta`;
       this.ChooseLanguage = `Elija un idioma`;
+      this.Back = `Espalda`;
     }
   }
 }

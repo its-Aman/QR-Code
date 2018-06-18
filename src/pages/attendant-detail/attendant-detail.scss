@@ -30,19 +30,19 @@ page-attendant-detail {
     font-size: 26px;
     margin: 0px 0 5px 0;
   }
-  .id{
-          margin: 5px 0;
+  .id {
+    margin: 5px 0;
   }
   .profession {
-    margin: 10px 0;
+    // margin: 10px 0;
     color: #98A4B5;
   }
   .ticket-details {
-    margin: 20px 0 0 0;
+    margin: 10px 0 0 0;
     font-size: 14px;
   }
   .ticket-time {
-    margin: 5px 0;
+    margin: 5px 0 50px 0;
   }
   .footer-grid {
     border-radius: 5px;
@@ -68,7 +68,7 @@ page-attendant-detail {
     font-size: 18px;
   }
   ion-footer {
-    width: 98%;
+    width: 99%;
   }
   .in-valid-div {
     border-radius: 20px;

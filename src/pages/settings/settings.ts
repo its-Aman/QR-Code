@@ -16,7 +16,6 @@ export class SettingsPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public global: GlobalProvider,
-    private db: DatabaseProvider,
     private alrtCtrl: AlertController,
     private events: Events,
   ) {

@@ -2,7 +2,6 @@ import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
-import { DatePipe } from '@angular/common';
 
 @IonicPage()
 @Component({

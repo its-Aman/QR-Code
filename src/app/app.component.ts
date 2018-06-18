@@ -28,7 +28,7 @@ export class MyApp {
 
     // this.refreshTokenLogic();
     this.global.cLog(`in app component`);
-    
+
     this.initializeApp();
     this.listenForTokenExpire();
     this.global.reflectchangedLanguage();
@@ -58,9 +58,11 @@ export class MyApp {
       localStorage.setItem('lang', 'en');
     }
 
-    db.get(`login-response`).then(res => {
+    this.db.get(`login-response`).then(res => {
+      this.global.cLog(`login-response's response is`, res);
       if (res) {
-        db.get(`event-selected`).then(res => {
+        this.db.get(`event-selected`).then(res => {
+          this.global.cLog(`event-selected's response is`, res);
           if (res) {
             this.rootPage = 'MenuPage';
           } else {
@@ -72,8 +74,8 @@ export class MyApp {
       }
     });
 
-    // if (db.get(`login-response`)) {
-    //   if (db.get('event-selected')) {
+    // if (this.db.get(`login-response`)) {
+    //   if (this.db.get('event-selected')) {
     //     this.rootPage = 'MenuPage';
     //   } else {
     //     this.rootPage = 'SelectActiveEventPage';

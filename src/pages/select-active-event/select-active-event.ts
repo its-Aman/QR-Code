@@ -1,7 +1,7 @@
 import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, App } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 @IonicPage()
@@ -21,7 +21,8 @@ export class SelectActiveEventPage {
     public navParams: NavParams,
     public fb: FormBuilder,
     public global: GlobalProvider,
-    private db: DatabaseProvider
+    private db: DatabaseProvider,
+    private app: App,
   ) {
     this.initForm();
   }
@@ -69,4 +70,16 @@ export class SelectActiveEventPage {
       this.isFormInvalid = true;
     }
   }
+
+  goToLogin() {
+    this.global.cLog(`in goToLogin`);
+
+    localStorage.removeItem('login-response');
+    this.db.remove('login-response').then(res => { this.global.cLog(`successfully removed login-response`) });
+    this.db.remove('event-selected').then(res => { this.global.cLog(`successfully removed event-selected`) });
+    this.global.user_credentials = null;
+
+    this.app.getRootNav().setRoot('LoginPage');
+  }
+
 }
