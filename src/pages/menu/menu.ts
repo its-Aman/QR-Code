@@ -100,6 +100,7 @@ export class MenuPage {
     localStorage.removeItem('login-response');
     this.db.remove('login-response').then(res => { this.global.cLog(`successfully removed `) });
     this.db.remove('event-selected').then(res => { this.global.cLog(`successfully removed event-selected`) });
+    this.db.remove('users').then(res => { this.global.cLog(`successfully removed event-selected`) });
     this.global.user_credentials = null;
 
     this.app.getRootNav().setRoot('LoginPage');

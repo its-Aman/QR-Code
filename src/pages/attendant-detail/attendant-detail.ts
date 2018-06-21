@@ -36,10 +36,20 @@ export class AttendantDetailPage {
     if (this.attendant) {
       this.isValid = true;
       this.getCheckedUncheckedDetails();
-      
+
       db.get('event-selected').then(res => {
         this.event = res;
         this.global.cLog(`event is`, this.event);
+
+        if (this.event.ticket_types.length > 0) {
+          this.event.ticket_types.forEach((ticket, i) => {
+            if (+ticket.id == +this.attendant.ticket_type_id) {
+              this.attendant["ticket_type"] = ticket.name;
+            }            
+            // this.attendant["ticket_type"] = ticket.name;
+          });
+        }
+
         //   this.event = {
         //     "id": "8",
         //     "name": "Seminario Empresarial EAR Alianza",
@@ -157,7 +167,7 @@ export class AttendantDetailPage {
   }
 
 
-  backButtonClick(e){
+  backButtonClick(e) {
     this.global.cLog(`backButtonClick() `, e);
   }
 }

@@ -22,11 +22,12 @@
         <form [formGroup]="selectEventForm">
           <ion-item>
             <ion-label>{{global?.SelectEvent}}</ion-label>
-            <ion-select formControlName="event" [selectOptions]="{'cssClass': 'eventList'}" [disabled]="!eventList && eventList?.length <= 0">
+            <ion-select formControlName="event" [selectOptions]="{'cssClass': 'eventList'}" [disabled]="eventList?.length <= 0">
               <ion-option *ngFor="let event of eventList" [value]="event?.id">{{event.name}}</ion-option>
             </ion-select>
           </ion-item>
           <p class="error" *ngIf="selectEventForm.controls['event']?.hasError('required') && (selectEventForm.controls['event']?.dirty || isFormInvalid)">{{global?.EventIsRequired}}</p>
+          <p *ngIf="eventList && eventList?.length <= 0" class="no-event">{{global?.noEvent}}</p>
         </form>
       </ion-col>
     </ion-row>
@@ -40,7 +41,7 @@
         <button class="reset-button" ion-button block (click)="goToLogin()">{{global?.Back}}</button>
       </ion-col>
       <ion-col no-padding>
-        <button class="reset-button" ion-button block (click)="next()" [disabled]="!eventList && eventList?.length <= 0">{{global?.Next}}</button>
+        <button class="reset-button" ion-button block (click)="next()" [disabled]="eventList?.length <= 0">{{global?.Next}}</button>
       </ion-col>
     </ion-row>
   </ion-grid>
