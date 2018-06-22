@@ -36,8 +36,7 @@
       <ion-col col-12 *ngIf="event?.id" class="id">ID: {{attendant?.document_id}} </ion-col>
       <!-- <ion-col col-12 *ngIf="event?.description" class="profession" [innerHTML]="event?.description"></ion-col> -->
       <ion-col col-12 *ngIf="attendant?.ticket_type" class="ticket-details">{{global?.Ticket}}: {{attendant?.ticket_type}}</ion-col>
-      <ion-col col-12 *ngIf="attendant?.checked_in_at && !attendant?.isToday" class="ticket-time"> {{attendant?.checked_in_at | date:'yyyy-MM-dd HH:mm'}}</ion-col>
-      <ion-col col-12 *ngIf="attendant?.checked_in_at && attendant?.isToday" class="ticket-time"> {{attendant?.checked_in_at | date:'HH:mm'}}</ion-col>
+      <ion-col col-12 *ngIf="attendant?.checked_in_at" class="ticket-time"> {{global?.printDateFormat(attendant?.checked_in_at, attendant?.isToday)}}</ion-col>
     </ion-row>
 
     <ion-row text-center *ngIf="!isValid">

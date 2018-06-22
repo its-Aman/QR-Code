@@ -46,7 +46,87 @@ export class SelectActiveEventPage {
         this.global.isTokenExpire = false;
         this.global.cLog('getList data', res);
         this.eventList = res;
-        this.selectEventForm.controls['event'].setValue(this.eventList[0].id);
+        if (this.eventList.length > 0) {
+          this.selectEventForm.controls['event'].setValue(this.eventList[0].id);
+        } else {
+          this.eventList = [
+            {
+              "id": 10202,
+              "name": "Anual biz meeting for Florida Attorneys",
+              "description": "",
+              "start": "2018-08-20 06:00",
+              "duration": 90,
+              "time_zone": "America/EDT",
+              "venue_name": "Miami Beach Convention Center, Miami, FL, US",
+              "latitude": 25.794769,
+              "longitude": -80.135344,
+              "capacity": 2000,
+              "instance": 730,
+              "instance_start": "2018-08-20 06:00",
+              "direct_link": "",
+              "ticket_types": [
+                {
+                  "id": 103203,
+                  "name": "General entrance",
+                  "quantity": 100,
+                  "minimum": 1
+                }
+              ]
+            },
+            {
+              "id": 10203,
+              "name": "Monthly review for Florida Illuminatis",
+              "description": "",
+              "start": "2018-08-20 06:00",
+              "duration": 90,
+              "time_zone": "America/EDT",
+              "venue_name": "Miami Beach Convention Center, Miami, FL, US",
+              "latitude": 25.794769,
+              "longitude": -80.135344,
+              "capacity": 2000,
+              "instance": 2005,
+              "instance_start": "2018-08-27 06:00",
+              "direct_link": "",
+              "ticket_types": [
+                {
+                  "id": 103204,
+                  "name": "General entrance",
+                  "quantity": 100,
+                  "minimum": 1
+                },
+                {
+                  "id": 103205,
+                  "name": "VIP Invitee",
+                  "quantity": 10,
+                  "minimum": 1
+                }
+              ]
+            },
+            {
+              "id": 10205,
+              "name": "Unicorns Scientific Review",
+              "description": "A meeting for unicorns with some scientific background.",
+              "start": "2018-08-20 05:00",
+              "duration": 90,
+              "time_zone": "America/EDT",
+              "venue_name": "Miami Beach Convention Center, Miami, FL, US",
+              "latitude": 25.794769,
+              "longitude": -80.135344,
+              "capacity": 2000,
+              "instance": 2005,
+              "instance_start": "2018-08-20 05:00",
+              "direct_link": "",
+              "ticket_types": [
+                {
+                  "id": 103204,
+                  "name": "General entrance",
+                  "quantity": 100,
+                  "minimum": 1
+                }
+              ]
+            }
+          ]
+        }
       }, err => {
         this.global.hideLoader();
         this.global.cLog('getList error', err);

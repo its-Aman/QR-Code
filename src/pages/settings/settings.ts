@@ -40,14 +40,14 @@ export class SettingsPage {
       type: 'radio',
       label: 'English',
       value: 'en',
-      checked: this.global.language == 'en',
+      checked: localStorage.getItem('lang') == 'en',
     });
 
     alert.addInput({
       type: 'radio',
       label: 'Español',
       value: 'es',
-      checked: this.global.language == 'es'
+      checked: localStorage.getItem('lang') == 'es'
     });
 
     alert.addButton('Cancel');
@@ -57,7 +57,6 @@ export class SettingsPage {
         this.global.cLog('Handler value is', val);
         // this.db.create('language', val);
         localStorage.setItem('lang', val);
-        this.global.language = val;
         this.global.reflectchangedLanguage();
       }
     });

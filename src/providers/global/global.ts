@@ -34,8 +34,6 @@ export class GlobalProvider {
 
   public user_credentials = JSON.parse(localStorage.getItem('login-response'));
 
-  public language: string = localStorage.getItem('lang');
-
   ScanQRCodes: string;
   SyncToServer: string;
   CleanEventData: string;
@@ -102,6 +100,11 @@ export class GlobalProvider {
     console.log('Hello GlobalProvider Provider');
     this.refreshTokenLogic();
 
+    let lang = localStorage.getItem('lang');
+
+    if (!lang) {
+      localStorage.setItem('lang', 'en');
+    }
 
     //testing server
     // this.base_path = 'http://private-amnesiac-bf0d54-eventonline.apiary-proxy.com/';
@@ -237,18 +240,19 @@ export class GlobalProvider {
   }
 
   hideLoader() {
-    try {
-      this.loader.dismiss()
-        .then(res => {
-          // this.loader = null;
-          console.log("loader hide done", res);
-        })
-        .catch(err => {
-          console.log("exception in loader hide", err);
-          setTimeout(v => { this.hideLoader(); }, 100)
-        });
+    if (this.loader) {
+      try {
+        this.loader.dismiss()
+          .then(res => {
+            // this.loader = null;
+          })
+          .catch(err => {
+            console.log("exception in loader hide", err);
+            setTimeout(v => { this.hideLoader(); }, 100)
+          });
+      }
+      catch (e) { }
     }
-    catch (e) { }
   }
 
   cLog(message?: any, ...optionalParams: any[]): void {
@@ -327,23 +331,47 @@ export class GlobalProvider {
     }
   }
 
-  // public isValidDate(d: any) {
+  public printDateFormat(d: any, isToday: boolean = false) {
+    let date: Date;
+    let dateInString: string;
 
-  //   if (!d) {
-  //     return false;
-  //   } else {
-  //     return (d instanceof Date) && (!isNaN(d)) ;
-  //   }
-  // }
+    try {
+      date = new Date(d);
+
+      if (Object.prototype.toString.call(date) === "[object Date]") {
+        // it is a date
+        if (isNaN(date.getTime())) {  // d.valueOf() could also work
+          // this.cLog('date is not valid');
+        } else {
+          // this.cLog('date is valid');
+          if (isToday) {
+            //HH:mm
+            // dateInString = `${date.getHours()}:${date.getMinutes()}`;
+            dateInString = date.toLocaleTimeString();
+          } else {
+            //yyyy-MM-dd HH:mm
+            // dateInString = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+            dateInString = date.toDateString();
+          }
+        }
+      } else {
+        // this.cLog('not a date');
+      }
+    } catch (e) {
+      this.cLog(`error in converting date format`, e);
+    }
+    // this.cLog(`date to be returned is `, dateInString);
+    return dateInString;
+  }
 
   reflectchangedLanguage() {
-    if (this.language == 'en') {
+    if (localStorage.getItem('lang') == 'en') {
 
       this.ScanQRCodes = `Scan QR Codes`;
       this.SyncToServer = `Sync to server`;
       this.CleanEventData = `Clean Event Data`;
       this.ChangeEvent = `Change Event`;
-      this.Setting = `Setting`;
+      this.Setting = `Settings`;
       this.Signout = `Sign out`;
       this.Search = `Search`;
       this.SearchAttendants = `Search Attendants`;
