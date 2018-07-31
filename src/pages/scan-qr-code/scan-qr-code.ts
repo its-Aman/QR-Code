@@ -52,7 +52,7 @@ export class ScanQrCodePage {
             if (res) {
               this.finalScan();
             } else {
-              this.global.cLog(`App needs location to fetch data, please enable location and set location accuracy mode to high.`);
+              this.global.cLog(`App needs camera, please enable it in app settings.`);
             }
           }).catch(err => {
             this.global.cLog(`Got the requestCameraAuthorization error `, err);
@@ -77,6 +77,7 @@ export class ScanQrCodePage {
       this.global.cLog("some error in prepare", err);
       if (err.code == 1) {
         this.global.showMessage(this.global.TheAppNeedsTheCameraToScanQRCodes);
+        this.navCtrl.pop();
       }
     });
   }

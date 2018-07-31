@@ -4,11 +4,11 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button ion-button icon-only (click)="openMenu()">
         <ion-icon ios="md-more" md="md-more"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
     <ion-title>{{global?.SelectActiveEvent}}</ion-title>
   </ion-navbar>
 
@@ -22,7 +22,7 @@
         <form [formGroup]="selectEventForm">
           <ion-item>
             <ion-label>{{global?.SelectEvent}}</ion-label>
-            <ion-select formControlName="event" [selectOptions]="{'cssClass': 'eventList'}" [disabled]="eventList?.length <= 0">
+            <ion-select formControlName="event" [selectOptions]="{'cssClass': 'eventList'}" [disabled]="eventList?.length <= 0" [cancelText]="global?.cancel" [okText]="global?.okay">
               <ion-option *ngFor="let event of eventList" [value]="event?.id">{{event.name}}</ion-option>
             </ion-select>
           </ion-item>

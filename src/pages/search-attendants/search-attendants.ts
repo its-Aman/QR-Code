@@ -196,13 +196,18 @@ export class SearchAttendantsPage {
   search(foo) {
     this.global.cLog('opening search', foo);
     this.isSearch = !this.isSearch;
+    if (foo == `ionClear`) {
+      this.resetSearchValue();
+    } else {
+      //set focus on searchbar
+    }
   }
 
   onInput(ev) {
     this.global.cLog('onInput($event) clicked', this.searchKey, ev);
     if (this.searchKey && this.searchKey.length > 2) {
       this.global.cLog('in if', this.searchKey);
-      this.attendants = this.attendants.filter(val => { return val.name.toLowerCase().includes(this.searchKey.toLowerCase()) });
+      this.attendants = this.attendants.filter(val => { return (val.first_name + val.last_name).toLowerCase().includes(this.searchKey.toLowerCase()) });
       this.noSearchResult = this.attendants.length == 0;
     } else {
       this.db.get('users').then(res => {
@@ -211,6 +216,17 @@ export class SearchAttendantsPage {
         this.noSearchResult = this.attendants ? this.attendants.length == 0 : false;
       });
     }
+  }
+
+  resetSearchValue() {
+    this.global.cLog(`in resetSearchValue`, this.isSearch);
+    this.db.get('users').then(res => {
+      this.global.cLog(`In db.get.users ${res}`);
+      this.searchKey = ``;
+      this.attendants = res;
+      this.noSearchResult = this.attendants ? this.attendants.length == 0 : false;
+    });
+
   }
 
   openDetails(i: number) {

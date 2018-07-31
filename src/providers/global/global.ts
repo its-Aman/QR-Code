@@ -90,6 +90,13 @@ export class GlobalProvider {
   ChooseLanguage: string;
   Back: String;
   noEvent: string;
+  warningText: string;
+  TheInformationNot: string;
+  okay: string;
+  cancel: string;
+  done: string;
+  loading: string;
+
   constructor(
     private http: HttpClient,
     private toastCtrl: ToastController,
@@ -282,7 +289,7 @@ export class GlobalProvider {
       this.cLog(`sending token`);
       return this.user_credentials.access_token;
     }
-  }
+  } f
 
 
   refreshTokenLogic() {
@@ -423,6 +430,13 @@ export class GlobalProvider {
       this.ChooseLanguage = `Choose Language`;
       this.Back = `Back`;
       this.noEvent = `No Event`;
+      this.warningText = `Warning`;
+      this.TheInformationNot = `The information not sent will be lost. Are you sure?`
+      this.okay = `Okay`;
+      this.cancel = `Cancel`;
+      this.done = `Done`;
+      this.loading = `Loading...`;
+
     } else {
 
       this.ScanQRCodes = `Escanear códigos QR`;
@@ -481,6 +495,12 @@ export class GlobalProvider {
       this.ChooseLanguage = `Elija un idioma`;
       this.Back = `Atrás`;
       this.noEvent = `Sin eventos`;
+      this.warningText = `Advertencia`;
+      this.TheInformationNot = `La información no enviada se perderá. ¿Estás seguro?`
+      this.okay = `Bueno`;
+      this.cancel = `Cancelar`;
+      this.done = `Hecho`;
+      this.loading = `Cargando...`;
     }
   }
 }

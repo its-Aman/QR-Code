@@ -72,7 +72,7 @@ export class MenuPage {
 
   cleanEventData() {
     this.global.cLog('clicked cleanEventData');
-    this.showAlert(`Warning`, `The information not sent will be lost. Are you sure?`, () => {
+    this.showAlert(this.global.warningText, this.global.TheInformationNot, () => {
       this.global.cLog('Clearing event log data');
       this.db.remove('users').then(res => {
         this.db.remove('event-selected').then(res => {
@@ -108,7 +108,7 @@ export class MenuPage {
 
   showAlert(title: string, subTitle: string, ok_callback?: Function) {
     let buttons: AlertButton[] = [{
-      text: 'OK',
+      text: this.global.okay,
       handler: () => {
         this.global.cLog('OK pressed');
 
@@ -122,7 +122,7 @@ export class MenuPage {
 
     if (ok_callback) {
       buttons.push({
-        text: 'Cancel',
+        text: this.global.cancel,
         role: 'cancel'
       });
     }

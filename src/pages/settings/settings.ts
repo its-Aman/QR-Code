@@ -1,4 +1,3 @@
-import { DatabaseProvider } from './../../providers/database/database';
 import { GlobalProvider } from './../../providers/global/global';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController, Events } from 'ionic-angular';
@@ -50,9 +49,9 @@ export class SettingsPage {
       checked: localStorage.getItem('lang') == 'es'
     });
 
-    alert.addButton('Cancel');
+    alert.addButton(this.global.cancel);
     alert.addButton({
-      text: "Done",
+      text: this.global.done,
       handler: (val) => {
         this.global.cLog('Handler value is', val);
         // this.db.create('language', val);
@@ -103,11 +102,11 @@ export class SettingsPage {
         }],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.global.cancel,
           role: 'cancel'
         },
         {
-          text: 'Change',
+          text: this.global.Change,
           handler: (val) => {
             this.changeSound(val);
           }
@@ -133,11 +132,11 @@ export class SettingsPage {
       }],
       buttons: [
         {
-          text: 'Cancel',
+          text: this.global.cancel,
           role: 'cancel'
         },
         {
-          text: 'Change',
+          text: this.global.Change,
           handler: (val) => {
             this.global.cLog(`in change basepath and the new basepath is `, val, val["0"]);
             localStorage.setItem('basepath', val["0"]);

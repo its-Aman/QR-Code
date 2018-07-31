@@ -67,9 +67,9 @@ export class LoginPage {
           this.global.user_credentials = res;
           localStorage.setItem('login-response', JSON.stringify(res));
           this.db.create('login-response', res).then(res => {
-            // setTimeout(() => {
+            setTimeout(() => {
               this.navCtrl.setRoot('SelectActiveEventPage', { data: null });
-            // }, 250);
+            }, 250);
           });
         }, err => {
           this.global.hideLoader();
