@@ -12,8 +12,8 @@
   </ion-navbar>
 
   <ion-navbar *ngIf="isSearch">
-    <ion-searchbar  animated="true" [(ngModel)]="searchKey" [showCancelButton]="shouldShowCancel" [placeholder]="global.Search" (ionInput)="onInput($event)"
-      (ionClear)="search('ionClear')" (ionCancel)="resetSearchValue()">
+    <ion-searchbar animated="true" [(ngModel)]="searchKey" [showCancelButton]="shouldShowCancel" [placeholder]="global.Search"
+      (ionInput)="onInput($event)" (ionClear)="search('ionClear')" (ionCancel)="resetSearchValue()">
     </ion-searchbar>
   </ion-navbar>
 </ion-header>
@@ -22,7 +22,7 @@
 <ion-content no-padding>
   <ion-list no-lines *ngIf="!noData || !noSearchResult">
     <ion-item *ngFor="let attendant of attendants; let i=index;" (click)="openDetails(i)">
-      <p class="name">{{attendant?.first_name + attendant?.last_name}}</p>
+      <p class="name">{{attendant?.first_name }} {{ attendant?.last_name}}</p>
       <p *ngIf="attendant?.checked" [class.red]="!attendant?.synced" class="time">{{global?.printDateFormat(attendant?.checked_in_at, attendant?.isToday)}}</p>
       <p *ngIf="!attendant?.checked" class="time">&lt;{{global?.NotChecked}}&gt;</p>
     </ion-item>

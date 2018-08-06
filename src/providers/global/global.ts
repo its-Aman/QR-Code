@@ -243,22 +243,16 @@ export class GlobalProvider {
       content: msg ? msg : 'Loading..',
       dismissOnPageChange: true
     });
-    this.loader.present().catch(res => { console.log("exception in show loader") });
+    this.loader.present().catch(err => { console.log("exception in show loader", err) });
   }
 
-  hideLoader() {
-    if (this.loader) {
-      try {
-        this.loader.dismiss()
-          .then(res => {
-            // this.loader = null;
-          })
-          .catch(err => {
-            console.log("exception in loader hide", err);
-            setTimeout(v => { this.hideLoader(); }, 100)
-          });
-      }
-      catch (e) { }
+  async hideLoader() {
+    try {
+      await this.loader.dismiss();
+    }
+    catch (e) {
+      console.log("exception in loader hide from catch", e);
+      setTimeout(v => { this.loader.dismissAll(); }, 100)
     }
   }
 
