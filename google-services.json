@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "420278800531",
+    "firebase_url": "https://clay-qr-scanner.firebaseio.com",
+    "project_id": "clay-qr-scanner",
+    "storage_bucket": "clay-qr-scanner.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:420278800531:android:91261505519ab402",
+        "android_client_info": {
+          "package_name": "com.clayQR.scanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "420278800531-pjmrkifrfap1atcrfnr3fqt5c82rarbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqwNhOpNMtRcy7rHPw2befJWf4-Vyq33s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

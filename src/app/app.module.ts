@@ -18,7 +18,8 @@ import { NativeAudio } from '@ionic-native/native-audio';
 import { GlobalProvider } from '../providers/global/global';
 import { NoopInterceptor } from '../providers/Interceptor/interceptor';
 import { HttpModule } from '@angular/http';
-
+import { CodePush } from '@ionic-native/code-push';
+import { CodepushProvider } from '../providers/codepush/codepush';
 
 @NgModule({
   declarations: [
@@ -50,6 +51,8 @@ import { HttpModule } from '@angular/http';
     QRScanner,
     Diagnostic,
     NativeAudio,
+    CodePush,
+    CodepushProvider
   ]
 })
 export class AppModule { }

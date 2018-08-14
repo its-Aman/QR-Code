@@ -18,7 +18,7 @@ export class MenuPage {
     public navParams: NavParams,
     public global: GlobalProvider,
     public app: App,
-    public alertCtrl: AlertController,
+    public alrtCtrl: AlertController,
     private db: DatabaseProvider,
     private events: Events
   ) {
@@ -127,7 +127,7 @@ export class MenuPage {
       });
     }
 
-    let alert = this.alertCtrl.create({
+    let alert = this.alrtCtrl.create({
       title: title,
       subTitle: subTitle,
       buttons: buttons,
@@ -177,4 +177,61 @@ export class MenuPage {
     });
   }
 
+  enterPlayerId(){
+    this.global.cLog(`in enterPlayerId's method`);
+    let alert = this.alrtCtrl.create({
+      title: this.global.enterPlayerManually,
+      inputs: [{
+        type: 'input',
+        placeholder: this.global.enterPlayerID,
+      }],
+      buttons: [
+        {
+          text: this.global.cancel,
+          role: 'cancel'
+        },
+        {
+          text: this.global.done,
+          handler: (val) => {
+            this.global.cLog(`in change basepath and the new basepath is `, val, val["0"]);
+            this.checkForUserPresentLocally(val["0"]);
+          }
+        }],
+    });
+
+    alert.present();
+  }
+
+  checkForUserPresentLocally(id: string) {
+    this.db.get('users').then((res: any[]) => {
+      this.global.cLog(`Got the users, now updating the time`, res);
+
+      if (res.length > 0) {
+        let user = res.find((user) => {
+          return user.id == id;
+        });
+
+        if (user) {
+          this.global.cLog(`User found `, user, ` now updating checked_in_time`);
+
+          res[res.indexOf(user)].checked_in_at = (new Date()).toISOString();
+          res[res.indexOf(user)].checked = true;
+          res[res.indexOf(user)].synced = false;
+          res[res.indexOf(user)].isToday = true;
+          // res[res.indexOf(user)].isToday = new Date().setHours(0, 0, 0, 0) == new Date(res[res.indexOf(user)].checked_in_at).setHours(0, 0, 0, 0);
+
+          this.db.create('users', res)
+            .then(update => {
+              this.global.cLog(`Users updated successfully`, update);
+              this.navCtrl.push('AttendantDetailPage', { data: user });
+            }).catch(err => {
+              this.global.cLog(`Users updated error`, err);
+              this.navCtrl.push('AttendantDetailPage', { data: null });
+            });
+        } else {
+          this.navCtrl.push('AttendantDetailPage', { data: null });
+        }
+      }
+    });
+  }
 }

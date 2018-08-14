@@ -49,6 +49,13 @@ export class SettingsPage {
       checked: localStorage.getItem('lang') == 'es'
     });
 
+    alert.addInput({
+      type: 'radio',
+      label: 'Portuguese',
+      value: 'pt',
+      checked: localStorage.getItem('lang') == 'pt'
+    });
+
     alert.addButton(this.global.cancel);
     alert.addButton({
       text: this.global.done,
