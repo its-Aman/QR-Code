@@ -10,6 +10,7 @@ import { IonicPage, NavController, NavParams, AlertController, Events } from 'io
 export class SettingsPage {
 
   muteSound: boolean = false;
+  fromLogin: boolean = false;
 
   constructor(
     public navCtrl: NavController,
@@ -19,6 +20,7 @@ export class SettingsPage {
     private events: Events,
   ) {
     this.muteSound = JSON.parse(localStorage.getItem('mute-sound'));
+    this.fromLogin = this.navParams.get('data') ? this.navParams.get('data').fromLogin : false;
     this.global.reflectchangedLanguage();
   }
 

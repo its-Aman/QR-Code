@@ -26,7 +26,7 @@
               {{global?.ChangeLanguage}}
             </ion-item>
 
-            <ion-item (click)="soundAndNotification()">
+            <ion-item (click)="soundAndNotification()" *ngIf="!fromLogin">
               <ion-icon class="icons" ios="md-notifications" md="md-notifications" item-start></ion-icon>
               {{global?.SoundNotifications}}
             </ion-item>
@@ -36,7 +36,7 @@
               {{global?.ChangeBasePath}}
             </ion-item>
 
-            <ion-item>
+            <ion-item  *ngIf="!fromLogin">
               <ion-icon *ngIf="muteSound" class="icons" ios="md-volume-off" md="md-volume-off" item-start></ion-icon>
               <ion-icon *ngIf="!muteSound" class="icons" ios="md-volume-up" md="md-volume-up" item-start></ion-icon>
 

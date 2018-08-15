@@ -43,6 +43,7 @@ export class LoginPage {
 
   openMenu() {
     this.global.cLog('Opening menu');
+    this.navCtrl.push('SettingsPage', { data: {fromLogin: true} });
   }
 
   login() {

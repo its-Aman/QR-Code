@@ -446,8 +446,8 @@ export class GlobalProvider {
     this.cancel = `Cancelar`;
     this.done = `Hecho`;
     this.loading = `Cargando...`;
-    this.enterPlayerID = `Enter Player ID`;
-    this.enterPlayerManually = `Enter player manually`;
+    this.enterPlayerID = `Ingrese la identificación del jugador`;
+    this.enterPlayerManually = `Ingrese el jugador manualmente`;
   }
 
   toEnglish(){
@@ -574,14 +574,14 @@ export class GlobalProvider {
     this.ChooseLanguage = `Escolha o seu idioma`;
     this.Back = `Atrás`;
     this.noEvent = `Sem eventos`;
-    this.warningText = `Warning`;
-    this.TheInformationNot = `The information not sent will be lost. Are you sure?`;
-    this.okay = `Okay`;
-    this.cancel = `Cancel`;
-    this.done = `Done`;
-    this.loading = `Loading...`;
-    this.enterPlayerManually = `Enter Player manually`;
-    this.enterPlayerID = `Enter Player ID`;
+    this.warningText = `Advertência`;
+    this.TheInformationNot = `A informação não enviada será perdida. Você tem certeza?`;
+    this.okay = `OK`;
+    this.cancel = `Cancelar`;
+    this.done = `Feito`;
+    this.loading = `Carregando...`;
+    this.enterPlayerManually = `Digite o jogador manualmente`;
+    this.enterPlayerID = `Digite o ID do jogador`;
   }
 
 }
