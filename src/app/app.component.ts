@@ -4,6 +4,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { CodepushProvider } from '../providers/codepush/codepush';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,7 +24,8 @@ export class MyApp {
     public splashScreen: SplashScreen,
     private db: DatabaseProvider,
     private events: Events,
-    private global: GlobalProvider
+    private global: GlobalProvider,
+    private codePush: CodepushProvider
   ) {
 
     // this.refreshTokenLogic();
@@ -87,7 +89,6 @@ export class MyApp {
       this.rootPage = 'LoginPage';
 
     });
-
   }
 
   initializeApp() {
@@ -96,8 +97,13 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+
+      this.fetch_OTA_Updates();
     });
   }
 
+  fetch_OTA_Updates(){
+    this.codePush.checkCodePush();
+  }
 
 }

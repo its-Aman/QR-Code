@@ -1,7 +1,30 @@
-______________________________________________________
+App Name: ClayQRScanner
+
+├────────────┼───────────────────────────────────────┤
 │ Name       │ Key                                   │
 ├────────────┼───────────────────────────────────────┤
 │ Staging    │ xtJO4-aoZ0WjCvUVP2XPDWvlf14eryLkJ8JU7 │
 ├────────────┼───────────────────────────────────────┤
 │ Production │ y9fo3TB8cSknFI9B9nz6dmVL3DYYSkvyJL1UX │
-------------------------------------------------------
+├────────────┼───────────────────────────────────────┤
+
+
+
+App Name: ClayQRScanner-IOS
+
+├────────────┼──────────────────────────────────────────────────────────────────┤
+│ Name       │ Key                                                              │
+├────────────┼──────────────────────────────────────────────────────────────────┤
+│ Staging    │ NsC9nwaVbC6ppZZ25emT37tcvKL8b5de7317-5100-42c1-b503-ab50e4de3e60 │
+├────────────┼──────────────────────────────────────────────────────────────────┤
+│ Production │ wzlXVDc50pP1Z2hyNVdtUycFNN9fb5de7317-5100-42c1-b503-ab50e4de3e60 │
+├────────────┼──────────────────────────────────────────────────────────────────┤
+
+
+1. https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cordova#releasing-updates
+
+2. https://docs.microsoft.com/en-us/appcenter/distribution/codepush/cli#releasing-updates-cordova
+
+
+# Single command
+code-push release-cordova ClayQRScanner Android -m --description "Updated"

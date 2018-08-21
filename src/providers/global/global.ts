@@ -541,7 +541,7 @@ export class GlobalProvider {
     this.Login = `Entrar`;
     this.Email = `Endereço de e-mail`;
     this.Password = `Senha`;
-    this.EmailIsRequired = `Email is Required`;
+    this.EmailIsRequired = `E-mail é obrigatório`;
     this.NotAValidEmail = `Não é um email válido`;
     this.PasswordIsRequired = `Senha requerida`;
     this.IForgotMyPassword = `Esqueci a minha senha`;
