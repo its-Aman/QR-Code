@@ -163,9 +163,9 @@ export class GlobalProvider {
 
     return this.http.get<any>(url, { headers: headers })
       .pipe(
-        retry(1),
+        // retry(1),
         catchError(err => this.handleError(err)),
-    );
+      );
   }
 
   postRequest(url: string, data: any) {
@@ -179,9 +179,9 @@ export class GlobalProvider {
 
     return this.http.post<any>(url, data, httpOptions)
       .pipe(
-        retry(1),
+        // retry(1),
         catchError(err => this.handleError(err)),
-    );
+      );
   }
 
   postRequestUnauthorised(url: string, data: any) {
@@ -194,9 +194,9 @@ export class GlobalProvider {
       })
     })
       .pipe(
-        retry(1),
+        // retry(1),
         catchError(err => this.handleError(err)),
-    );
+      );
   }
 
   putRequest(url: string, data: any) {
@@ -210,9 +210,9 @@ export class GlobalProvider {
 
     return this.http.put<any>(url, data, httpOptions)
       .pipe(
-        retry(1),
+        // retry(1),
         catchError(err => this.handleError(err)),
-    );
+      );
   }
 
   putRequestUnauthorize(url: string, data: any) {
@@ -226,9 +226,9 @@ export class GlobalProvider {
 
     return this.http.put<any>(url, data, httpOptions)
       .pipe(
-        retry(1),
+        // retry(1),
         catchError(err => this.handleError(err)),
-    );
+      );
   }
 
   showMessage(message: string, duration: number = 2000, position: string = 'top') {
@@ -240,10 +240,11 @@ export class GlobalProvider {
     }).present();
   }
 
-  showLoader(msg?) {
+  showLoader(msg?: string) {
     this.loader = this.loadingCtrl.create({
       content: msg ? msg : 'Loading..',
-      dismissOnPageChange: true
+      dismissOnPageChange: true,
+      duration: 5000
     });
     this.loader.present().catch(err => { console.log("exception in show loader", err) });
   }
@@ -369,12 +370,12 @@ export class GlobalProvider {
 
   reflectchangedLanguage() {
     if (localStorage.getItem('lang')) {
-      
+
       switch (localStorage.getItem('lang')) {
         case `en`: this.toEnglish(); break;
         case `es`: this.toSpanish(); break;
         case `pt`: this.toPortuguese(); break;
-        
+
         default: this.cLog(`default case`); this.toEnglish(); break;
       }
     } else {
@@ -382,8 +383,8 @@ export class GlobalProvider {
       this.toEnglish();
     }
   }
-    
-  toSpanish(){
+
+  toSpanish() {
     this.ScanQRCodes = `Escanear códigos QR`;
     this.SyncToServer = `Sincronizar servidor`;
     this.CleanEventData = `Borrar datos evento`;
@@ -450,7 +451,7 @@ export class GlobalProvider {
     this.enterPlayerManually = `Ingrese el jugador manualmente`;
   }
 
-  toEnglish(){
+  toEnglish() {
     this.ScanQRCodes = `Scan QR Codes`;
     this.SyncToServer = `Sync to server`;
     this.CleanEventData = `Clean Event Data`;
@@ -517,7 +518,7 @@ export class GlobalProvider {
     this.enterPlayerID = "Enter Player ID";
   }
 
-  toPortuguese(){
+  toPortuguese() {
     this.ScanQRCodes = `Digitalizar códigos QR`;
     this.SyncToServer = `Sincronize com o servidor`;
     this.CleanEventData = `Limpar dados do evento`;
