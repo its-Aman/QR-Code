@@ -31,7 +31,7 @@ export class MenuPage {
 
   ionViewDidEnter() {
     this.global.cLog('ionViewDidEnter MenuPage');
-    this.events.publish('ionViewDidEnter-MenuPage');
+    // this.events.publish('ionViewDidEnter-MenuPage');
   }
 
   getEventDetails() {

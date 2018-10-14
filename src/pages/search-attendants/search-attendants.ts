@@ -77,7 +77,6 @@ export class SearchAttendantsPage {
                 this.global.cLog(`getAttendes's response is `, res);
 
                 let attendantsFromAPI = this.formatData(res);
-                // debugger;
                 if (!attendantsFromDB) {
 
                   this.global.cLog(`no attendants in db`);
